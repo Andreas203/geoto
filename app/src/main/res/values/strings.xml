@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">GEOTO</string>
+
+    <string name="tab_text_1">Gallery</string>
+    <string name="gallery_page_title">Gallery Page</string>
+
+    <string name="tab_text_2">Home</string>
+    <string name="home_page_title">Home Page</string>
+
+    <string name="tab_text_3">New Visit</string>
+    <string name="new_visit_page_title">New Visit Page</string>
+
+    <string name="action_settings">Settings</string>
+
+
+
+</resources>

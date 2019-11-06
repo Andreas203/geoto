@@ -17,7 +17,7 @@ import com.example.geoto.R;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_3, R.string.tab_text_2};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -34,10 +34,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             return GalleryFragment.newInstance(position + 1);
         }
         if (position == 1) {
-            return HomeFragment.newInstance(position + 1);
+            return NewVisitFragment.newInstance(position + 1);
         }
         else {
-            return NewVisitFragment.newInstance(position + 1);
+            return PathsFragment.newInstance(position + 1);
         }
 
     }

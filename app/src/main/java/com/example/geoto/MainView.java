@@ -17,7 +17,7 @@ import android.view.View;
 
 import com.example.geoto.ui.main.SectionsPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

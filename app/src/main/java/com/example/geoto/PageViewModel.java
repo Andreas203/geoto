@@ -1,4 +1,4 @@
-package com.example.geoto.ui.main;
+package com.example.geoto;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;

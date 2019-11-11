@@ -6,11 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@androidx.room.Database(entities = {PhotoData.class, PathData.class, ReadingData.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {PhotoData.class, PathData.class, LocationData.class, TempData.class, PressureData.class}, version = 1, exportSchema = false)
 public abstract class MyRoomDatabase extends RoomDatabase {
     public abstract PhotoDAO photoDao();
     public abstract PathDAO pathDao();
-    public abstract ReadingDAO readingDao();
+    public abstract LocationDAO locationDao();
+    public abstract TempDAO tempDao();
+    public abstract PressureDAO pressureDao();
 
     // marking the instance as volatile to ensure atomic access to the variable
     private static volatile MyRoomDatabase INSTANCE;

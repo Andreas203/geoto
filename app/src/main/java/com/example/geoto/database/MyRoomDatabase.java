@@ -1,12 +1,12 @@
 package com.example.geoto.database;
 
 import android.content.Context;
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.RoomDatabase;
-import android.content.Context;
-import android.support.annotation.NonNull;
 
-@android.arch.persistence.room.Database(entities = {PhotoData.class, PathData.class, ReadingData.class}, version = 1, exportSchema = false)
+import androidx.annotation.NonNull;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
+@androidx.room.Database(entities = {PhotoData.class, PathData.class, ReadingData.class}, version = 1, exportSchema = false)
 public abstract class MyRoomDatabase extends RoomDatabase {
     public abstract PhotoDAO photoDao();
     public abstract PathDAO pathDao();
@@ -19,7 +19,7 @@ public abstract class MyRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (MyRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = android.arch.persistence.room.Room.databaseBuilder(context.getApplicationContext(),
+                    INSTANCE = androidx.room.Room.databaseBuilder(context.getApplicationContext(),
                             MyRoomDatabase.class, "number_database")
                             // Wipes and rebuilds instead of migrating if no Migration object.
                             // Migration is not part of this codelab.

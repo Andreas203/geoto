@@ -2,10 +2,12 @@ package com.example.geoto.database;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import java.util.Date;
 
 @Entity()
+@TypeConverters({Converters.class})
 public class PathData {
     @PrimaryKey(autoGenerate = true)
     @androidx.annotation.NonNull
@@ -16,7 +18,7 @@ public class PathData {
     private String description;
 
 
-    public PathData(int pathId, String title, Date date, Date time, String description) {
+    public PathData(int pathId, String title, Date startDate, Date endDate, String description) {
         this.pathId = pathId;
         this.title = title;
         this.startDate = startDate;

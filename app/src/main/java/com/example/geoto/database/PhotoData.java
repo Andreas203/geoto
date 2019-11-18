@@ -2,8 +2,10 @@ package com.example.geoto.database;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 @Entity()
+@TypeConverters({Converters.class})
 public class PhotoData {
     @PrimaryKey(autoGenerate = true)
     @androidx.annotation.NonNull
@@ -11,7 +13,7 @@ public class PhotoData {
     private int number;
 
     public PhotoData(int number) {
-        this.number= number;
+        this.number = number;
     }
 
     @androidx.annotation.NonNull

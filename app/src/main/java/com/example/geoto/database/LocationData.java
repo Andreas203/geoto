@@ -2,10 +2,12 @@ package com.example.geoto.database;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import java.util.Date;
 
 @Entity()
+@TypeConverters({Converters.class})
 public class LocationData {
     @PrimaryKey(autoGenerate = true)
     @androidx.annotation.NonNull

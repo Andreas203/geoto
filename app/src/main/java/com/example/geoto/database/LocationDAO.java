@@ -1,4 +1,29 @@
 package com.example.geoto.database;
 
+import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+
+@Dao
 public interface LocationDAO {
+    @Insert
+    void insertAll(LocationData... locationData);
+
+    @Insert
+    void insert(LocationData locationData);
+
+    @Delete
+    void delete(LocationData locationData);
+
+    // it selects a random element
+    @Query("SELECT * FROM locationData ORDER BY RANDOM() LIMIT 1")
+    LiveData<LocationData> retrieveOneLocation();
+
+    @Delete
+    void deleteAll(LocationData... locationData);
+
+    @Query("SELECT COUNT(*) FROM locationData")
+    int howManyElements();
 }

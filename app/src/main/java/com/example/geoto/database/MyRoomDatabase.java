@@ -4,9 +4,11 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @androidx.room.Database(entities = {PhotoData.class, PathData.class, LocationData.class, TempData.class, PressureData.class}, version = 1, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class MyRoomDatabase extends RoomDatabase {
     public abstract PhotoDAO photoDao();
     public abstract PathDAO pathDao();
@@ -22,7 +24,7 @@ public abstract class MyRoomDatabase extends RoomDatabase {
             synchronized (MyRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = androidx.room.Room.databaseBuilder(context.getApplicationContext(),
-                            MyRoomDatabase.class, "number_database")
+                            MyRoomDatabase.class, "database")
                             // Wipes and rebuilds instead of migrating if no Migration object.
                             // Migration is not part of this codelab.
                             .fallbackToDestructiveMigration()

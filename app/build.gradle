@@ -36,4 +36,6 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.2.1'
     testImplementation 'androidx.room:room-testing:2.2.1'
     implementation 'androidx.room:room-rxjava2:2.2.1'
+
+    implementation 'com.github.jkwiecien:EasyImage:2.0.3'
 }

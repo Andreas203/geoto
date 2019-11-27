@@ -82,7 +82,7 @@ public class GalleryFragment extends Fragment {
         initData();
 
         // required by Android 6.0 +
-        checkPermissions(container.getContext());
+//        checkPermissions(container.getContext());
 
         initEasyImage();
 

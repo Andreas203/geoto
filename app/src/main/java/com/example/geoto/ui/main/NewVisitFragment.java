@@ -50,6 +50,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
     private Button mButtonStart;
     private Button mButtonEnd;
+    private Barometer barometer;
 
 
     public static NewVisitFragment newInstance(int index) {
@@ -119,6 +120,8 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         startLocationUpdates();
+        barometer.startSensingPressure();
+
     }
 
 
@@ -179,12 +182,13 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.new_visit_main, container, false);
-
+        barometer = new Barometer(getContext());
         mButtonStart = (Button) root.findViewById(R.id.button_start);
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startLocationUpdates();
+                barometer.startSensingPressure();
                 if (mButtonEnd != null)
                     mButtonEnd.setEnabled(true);
                 mButtonStart.setEnabled(false);
@@ -197,6 +201,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 stopLocationUpdates();
+                barometer.stopBarometer();
                 if (mButtonStart != null)
                     mButtonStart.setEnabled(true);
                 mButtonEnd.setEnabled(false);

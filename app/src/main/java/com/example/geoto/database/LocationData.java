@@ -17,8 +17,7 @@ public class LocationData {
     private float accuracy;
     private Date date;
 
-    public LocationData(int locationId, float latitude, float longitude, float accuracy, Date date) {
-        this.locationId = locationId;
+    public LocationData(float latitude, float longitude, float accuracy, Date date) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.accuracy = accuracy;

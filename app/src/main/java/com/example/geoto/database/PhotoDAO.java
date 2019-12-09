@@ -18,8 +18,8 @@ public interface PhotoDAO {
     void delete(PhotoData photoData);
 
     // it selects a random element
-    @Query("SELECT * FROM photoData ORDER BY RANDOM() LIMIT 1")
-    LiveData<PhotoData> retrieveOnePhoto();
+    @Query("SELECT * FROM photoData")
+    LiveData<PhotoData> getAllPhotos();
 
     @Delete
     void deleteAll(PhotoData... photoData);

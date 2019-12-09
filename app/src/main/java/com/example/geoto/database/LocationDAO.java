@@ -18,8 +18,8 @@ public interface LocationDAO {
     void delete(LocationData locationData);
 
     // it selects a random element
-    @Query("SELECT * FROM locationData ORDER BY RANDOM() LIMIT 1")
-    LiveData<LocationData> retrieveOneLocation();
+    @Query("SELECT * FROM locationData")
+    LiveData<LocationData> getAllLocations();
 
     @Delete
     void deleteAll(LocationData... locationData);

@@ -18,8 +18,8 @@ public interface PressureDAO {
     void delete(PressureData pressureData);
 
     // it selects a random element
-    @Query("SELECT * FROM pressureData ORDER BY RANDOM() LIMIT 1")
-    LiveData<PressureData> retrieveOnePressure();
+    @Query("SELECT * FROM pressureData")
+    LiveData<PressureData> getAllPressures();
 
     @Delete
     void deleteAll(PressureData... pressureData);

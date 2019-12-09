@@ -18,8 +18,8 @@ public interface PathDAO {
     void delete(PathData pathData);
 
     // it selects a random element
-    @Query("SELECT * FROM pathData ORDER BY RANDOM() LIMIT 1")
-    LiveData<PathData> retrieveOnePath();
+    @Query("SELECT * FROM pathData")
+    LiveData<PathData> getAllPaths();
 
     @Delete
     void deleteAll(PathData... pathData);

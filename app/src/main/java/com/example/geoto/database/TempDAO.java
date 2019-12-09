@@ -18,8 +18,8 @@ public interface TempDAO {
     void delete(TempData tempData);
 
     // it selects a random element
-    @Query("SELECT * FROM tempData ORDER BY RANDOM() LIMIT 1")
-    LiveData<TempData> retrieveOneTemp();
+    @Query("SELECT * FROM tempData")
+    LiveData<TempData> getAllTemps();
 
     @Delete
     void deleteAll(TempData... tempData);

@@ -15,8 +15,7 @@ public class TempData {
     private float temp;
     private Date date;
 
-    public TempData(int tempId, float temp, Date date) {
-        this.tempId = tempId;
+    public TempData(float temp, Date date) {
         this.temp = temp;
         this.date = date;
     }

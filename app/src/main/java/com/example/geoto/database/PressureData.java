@@ -15,8 +15,7 @@ public class PressureData {
     private float pressure;
     private Date date;
 
-    public PressureData(int pressureId, float pressure, Date date) {
-        this.pressureId = pressureId;
+    public PressureData(float pressure, Date date) {
         this.pressure = pressure;
         this.date = date;
     }

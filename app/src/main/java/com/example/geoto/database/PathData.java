@@ -18,7 +18,7 @@ public class PathData {
     private String description;
 
 
-    public PathData(int pathId, String title, Date startDate, Date endDate, String description) {
+    public PathData(String title, Date startDate, Date endDate, String description) {
         this.pathId = pathId;
         this.title = title;
         this.startDate = startDate;

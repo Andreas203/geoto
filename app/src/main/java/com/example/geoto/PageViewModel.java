@@ -17,6 +17,8 @@ import com.example.geoto.database.TempData;
 public class PageViewModel extends AndroidViewModel {
     private final Repository repository;
 
+    private MutableLiveData<Integer> mIndex = new MutableLiveData<>();
+
     LiveData<PhotoData> photoDataToDisplay;
     LiveData<PathData> pathDataToDisplay;
     LiveData<LocationData> locationDataToDisplay;
@@ -32,5 +34,9 @@ public class PageViewModel extends AndroidViewModel {
         locationDataToDisplay = repository.getAllLocations();
         pressureDataToDisplay = repository.getAllPressures();
         tempDataToDisplay = repository.getAllTemps();
+    }
+
+    public void setIndex(int index) {
+        mIndex.setValue(index);
     }
 }

@@ -3,6 +3,7 @@ package com.example.geoto.database;
 import android.graphics.Bitmap;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -14,12 +15,12 @@ public class PhotoData {
     @PrimaryKey(autoGenerate = true)
     @androidx.annotation.NonNull
     private int id=0;
+    @Ignore
     private Bitmap picture;
     private Date date;
 
 
-    public PhotoData(Bitmap picture, Date date) {
-        this.picture = picture;
+    public PhotoData(Date date) {
         this.date = date;
     }
 

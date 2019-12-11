@@ -31,6 +31,7 @@
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="30dp"
             tools:layout_editor_absoluteX="63dp"
             tools:layout_editor_absoluteY="171dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>

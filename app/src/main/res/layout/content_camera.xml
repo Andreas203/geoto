@@ -8,6 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00000000"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.geoto.GalleryFragment"
     tools:showIn="@layout/gallery_main">
@@ -16,14 +17,13 @@
         android:id="@+id/grid_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:gravity="center"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp" />
+        android:background="#00000000"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

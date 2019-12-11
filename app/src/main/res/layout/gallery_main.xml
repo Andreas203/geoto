@@ -3,14 +3,17 @@
   ~ Copyright (c) 2017. This code has been developed by Fabio Ciravegna, The University of Sheffield. All rights reserved. No part of this code can be used without the explicit written permission by the author
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context="com.example.geoto.MainView">
 
-    <include layout="@layout/content_camera" />
+    <include
+        layout="@layout/content_camera"
+        android:background="#000000" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_gallery"

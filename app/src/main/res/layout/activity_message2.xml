@@ -8,17 +8,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="#000000">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"/>
+        android:theme="@style/AppTheme.AppBarOverlay" />
 
-   <ImageView
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:id="@+id/image"/>
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

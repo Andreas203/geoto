@@ -121,6 +121,37 @@ public class GalleryFragment extends Fragment {
         myPictureList.add(new ImageElement(R.drawable.joe1));
         myPictureList.add(new ImageElement(R.drawable.joe2));
         myPictureList.add(new ImageElement(R.drawable.joe3));
+        myPictureList.add(new ImageElement(R.drawable.joe1));
+        myPictureList.add(new ImageElement(R.drawable.joe2));
+        myPictureList.add(new ImageElement(R.drawable.joe3));
+        myPictureList.add(new ImageElement(R.drawable.joe1));
+        myPictureList.add(new ImageElement(R.drawable.joe2));
+        myPictureList.add(new ImageElement(R.drawable.joe3));
+        myPictureList.add(new ImageElement(R.drawable.joe1));
+        myPictureList.add(new ImageElement(R.drawable.joe2));
+        myPictureList.add(new ImageElement(R.drawable.joe3));
+        myPictureList.add(new ImageElement(R.drawable.joe1));
+        myPictureList.add(new ImageElement(R.drawable.joe2));
+        myPictureList.add(new ImageElement(R.drawable.joe3));
+        myPictureList.add(new ImageElement(R.drawable.joe1));
+        myPictureList.add(new ImageElement(R.drawable.joe2));
+        myPictureList.add(new ImageElement(R.drawable.joe3));
+        myPictureList.add(new ImageElement(R.drawable.joe1));
+        myPictureList.add(new ImageElement(R.drawable.joe2));
+        myPictureList.add(new ImageElement(R.drawable.joe3));
+        myPictureList.add(new ImageElement(R.drawable.joe1));
+        myPictureList.add(new ImageElement(R.drawable.joe2));
+        myPictureList.add(new ImageElement(R.drawable.joe3));
+        myPictureList.add(new ImageElement(R.drawable.joe1));
+        myPictureList.add(new ImageElement(R.drawable.joe2));
+        myPictureList.add(new ImageElement(R.drawable.joe3));
+        myPictureList.add(new ImageElement(R.drawable.joe1));
+        myPictureList.add(new ImageElement(R.drawable.joe2));
+        myPictureList.add(new ImageElement(R.drawable.joe3));
+        myPictureList.add(new ImageElement(R.drawable.joe1));
+        myPictureList.add(new ImageElement(R.drawable.joe2));
+        myPictureList.add(new ImageElement(R.drawable.joe3));
+
     }
 
     private void initEasyImage() {

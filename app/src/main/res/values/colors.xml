@@ -3,4 +3,8 @@
     <color name="colorPrimary">#444059</color>
     <color name="colorPrimaryDark">#444059</color>
     <color name="colorAccent">#E64447</color>
+    <!-- app/src/main/res/values/colors.xml -->
+    <color name="darkColorPrimary">#1e2756</color>
+    <color name="darkColorPrimaryDark">#141831</color>
+    <color name="darkColorAccent">#2aac4b</color>
 </resources>

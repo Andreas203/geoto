@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.example.geoto.ui.main.SectionsPagerAdapter;
 
@@ -35,9 +38,19 @@ public class MainView extends AppCompatActivity {
 
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2987;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 7829;
+    public static boolean dark;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
+//        setTheme(R.style.Trash);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -55,14 +68,21 @@ public class MainView extends AppCompatActivity {
 //            }
 //        });
 //
+
+//        Switch switch1 = findViewById(R.id.switch1);
+//        System.out.println(switch1);
+
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         viewPager.setCurrentItem(1);
 
         checkPermissions(this);
-
         System.out.println("permissions have been checked");
+
+
     }
 
     @Override
@@ -81,7 +101,12 @@ public class MainView extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            System.out.println("The settings button has been pressed!");
+            startActivity(new Intent(this, Settings.class));
             return true;
+
+
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -147,4 +172,9 @@ public class MainView extends AppCompatActivity {
             }
         }
     }
+
+
+
+
+
 }

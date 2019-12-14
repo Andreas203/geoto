@@ -30,6 +30,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -47,10 +49,15 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
+    private Polyline line;
 
     private Button mButtonStart;
     private Button mButtonEnd;
     private Barometer barometer;
+
+    private LatLng place1 = null;
+
+    private LatLng place2 = new LatLng(53.2218, 1.6731);;
 
 
     public static NewVisitFragment newInstance(int index) {
@@ -99,6 +106,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
             return;
         }
+
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
     }
 
@@ -134,10 +142,19 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             mCurrentLocation = locationResult.getLastLocation();
             mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
             Log.i("MAP", "new location " + mCurrentLocation.toString());
+            place2 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             if (googleMap != null)
                 googleMap.addMarker(new MarkerOptions().position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
                         .title(mLastUpdateTime));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
+            //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
+            if(place1 != null)
+                googleMap.addPolyline(new PolylineOptions()
+                        .clickable(true)
+                        .add(
+                                place1,
+                                place2)
+                );
+                place1 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         }
     };
 
@@ -215,11 +232,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
-        // Add a marker in Sydney, Australia,
-        // and move the map's camera to the same location.
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
     }
 }

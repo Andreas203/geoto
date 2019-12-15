@@ -3,6 +3,9 @@ package com.example.geoto.ui.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +43,9 @@ import java.util.Date;
 
 import pl.aprilapps.easyphotopicker.EasyImage;
 
+import static android.content.Context.SENSOR_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -59,7 +65,9 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     private ExtendedFloatingActionButton mButtonEnd;
     private FloatingActionButton fabCamera;
     private FloatingActionButton fabGallery;
+
     private Barometer barometer;
+    private Thermometer thermometer;
 
     private LatLng place1 = null;
     private LatLng place2 = null;
@@ -72,6 +80,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         fragment.setArguments(bundle);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,9 +140,9 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-
         startLocationUpdates();
         barometer.startSensingPressure();
+        thermometer.startSensingPressure();
 
     }
 
@@ -205,6 +214,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.new_visit_main, container, false);
         barometer = new Barometer(getContext());
+        thermometer = new Thermometer(getContext());
 
         fabCamera = (FloatingActionButton) root.findViewById(R.id.fab_camera);
         fabCamera.setOnClickListener(new View.OnClickListener() {
@@ -246,7 +256,12 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 stopLocationUpdates();
+                // Removes all markers, overlays, and polylines from the map.
+                googleMap.clear();
+                place1 = null;
+
                 barometer.stopBarometer();
+                thermometer.stopThermometer();
                 if (mButtonStart != null)
                     mButtonStart.setEnabled(true);
                 mButtonEnd.setEnabled(false);

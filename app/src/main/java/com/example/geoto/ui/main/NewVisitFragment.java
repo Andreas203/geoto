@@ -32,9 +32,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.util.Date;
+
+import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -57,7 +60,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
     private LatLng place1 = null;
 
-    private LatLng place2 = new LatLng(53.2218, 1.6731);;
+    private LatLng place2 = null;
 
 
     public static NewVisitFragment newInstance(int index) {
@@ -226,7 +229,33 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         });
         mButtonEnd.setEnabled(false);
 
+        initEasyImage();
+
+        FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.fab_camera);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EasyImage.openCamera(getActivity(), 0);
+            }
+        });
+
+        FloatingActionButton fabGallery = (FloatingActionButton) root.findViewById(R.id.fab_gallery);
+        fabGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EasyImage.openGallery(getActivity(), 0);
+            }
+        });
+
         return root;
+    }
+
+    private void initEasyImage() {
+        EasyImage.configuration(getContext())
+                .setImagesFolderName("EasyImage sample")
+                .setCopyTakenPhotosToPublicGalleryAppFolder(true)
+                .setCopyPickedImagesToPublicGalleryAppFolder(false)
+                .setAllowMultiplePickInGallery(true);
     }
 
     @Override

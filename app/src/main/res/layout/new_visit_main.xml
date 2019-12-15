@@ -7,80 +7,53 @@
     android:layout_height="match_parent"
     tools:context=".GalleryFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="157dp"
-            android:layout_height="41dp"
-            android:layout_marginTop="345dp"
-            android:layout_marginBottom="345dp"
-            android:text="@string/new_visit_page_title"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            android:textStyle="bold|italic"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="30dp"
-            tools:layout_editor_absoluteX="63dp"
-            tools:layout_editor_absoluteY="171dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin" />
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="400dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="171dp" />
+
+        <Button
+            android:id="@+id/button_end"
+            android:layout_width="117dp"
+            android:layout_height="81dp"
+            android:layout_gravity="bottom|right"
+            android:text="Button" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/ic_add_a_photo_white_24dp"
+            app:backgroundTint="@color/colorAccent"
+            app:fabSize="normal" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/ic_gallery_white_24dp"
+            app:backgroundTint="@color/colorAccent"
+            app:fabSize="normal" />
+
+        <Button
+            android:id="@+id/button_start"
+            android:layout_width="117dp"
+            android:layout_height="81dp"
+            android:layout_gravity="bottom"
+            android:text="Button" />
+
     </FrameLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_map"
-        app:fabSize="auto" />
-
-    <Button
-        android:id="@+id/button_start"
-        android:layout_width="170dp"
-        android:layout_height="155dp"
-        android:layout_weight="1"
-        android:adjustViewBounds="true"
-        android:background="@null"
-        android:gravity="center"
-        android:scaleType="fitCenter"
-        android:text="Start" />
-
-    <Button
-        android:id="@+id/button_end"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_weight="1"
-        android:adjustViewBounds="true"
-        android:background="@null"
-        android:gravity="center"
-        android:scaleType="fitCenter"
-        android:text="Stop" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

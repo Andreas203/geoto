@@ -32,9 +32,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.util.Date;
+
+import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -51,8 +55,10 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient mFusedLocationClient;
     private Polyline line;
 
-    private Button mButtonStart;
-    private Button mButtonEnd;
+    private ExtendedFloatingActionButton mButtonStart;
+    private ExtendedFloatingActionButton mButtonEnd;
+    private FloatingActionButton fabCamera;
+    private FloatingActionButton fabGallery;
     private Barometer barometer;
 
     private LatLng place1 = null;
@@ -200,7 +206,25 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         View root = inflater.inflate(R.layout.new_visit_main, container, false);
         barometer = new Barometer(getContext());
 
-        mButtonStart = (Button) root.findViewById(R.id.button_start);
+        fabCamera = (FloatingActionButton) root.findViewById(R.id.fab_camera);
+        fabCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EasyImage.openCamera(getActivity(), 0);
+            }
+        });
+        fabCamera.hide();
+
+        fabGallery = (FloatingActionButton) root.findViewById(R.id.fab_gallery);
+        fabGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EasyImage.openGallery(getActivity(), 0);
+            }
+        });
+        fabGallery.hide();
+
+        mButtonStart = (ExtendedFloatingActionButton) root.findViewById(R.id.button_start);
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,11 +233,15 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                 if (mButtonEnd != null)
                     mButtonEnd.setEnabled(true);
                 mButtonStart.setEnabled(false);
+                mButtonStart.hide();
+                mButtonEnd.show();
+                fabCamera.show();
+                fabGallery.show();
             }
         });
         mButtonStart.setEnabled(true);
 
-        mButtonEnd = (Button) root.findViewById(R.id.button_end);
+        mButtonEnd = (ExtendedFloatingActionButton) root.findViewById(R.id.button_end);
         mButtonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,11 +250,26 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                 if (mButtonStart != null)
                     mButtonStart.setEnabled(true);
                 mButtonEnd.setEnabled(false);
+                mButtonEnd.hide();
+                mButtonStart.show();
+                fabCamera.hide();
+                fabGallery.hide();
             }
         });
+        mButtonEnd.hide();
         mButtonEnd.setEnabled(false);
 
+        initEasyImage();
+
         return root;
+    }
+
+    private void initEasyImage() {
+        EasyImage.configuration(getContext())
+                .setImagesFolderName("EasyImage sample")
+                .setCopyTakenPhotosToPublicGalleryAppFolder(true)
+                .setCopyPickedImagesToPublicGalleryAppFolder(false)
+                .setAllowMultiplePickInGallery(true);
     }
 
     @Override

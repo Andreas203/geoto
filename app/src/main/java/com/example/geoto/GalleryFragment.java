@@ -84,23 +84,7 @@ public class GalleryFragment extends Fragment {
         // required by Android 6.0 +
 //        checkPermissions(container.getContext());
 
-        initEasyImage();
 
-        FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.fab_camera);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EasyImage.openCamera(getActivity(), 0);
-            }
-        });
-
-        FloatingActionButton fabGallery = (FloatingActionButton) root.findViewById(R.id.fab_gallery);
-        fabGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EasyImage.openGallery(getActivity(), 0);
-            }
-        });
 
         return root;
     }
@@ -152,14 +136,6 @@ public class GalleryFragment extends Fragment {
         myPictureList.add(new ImageElement(R.drawable.joe2));
         myPictureList.add(new ImageElement(R.drawable.joe3));
 
-    }
-
-    private void initEasyImage() {
-        EasyImage.configuration(getContext())
-                .setImagesFolderName("EasyImage sample")
-                .setCopyTakenPhotosToPublicGalleryAppFolder(true)
-                .setCopyPickedImagesToPublicGalleryAppFolder(false)
-                .setAllowMultiplePickInGallery(true);
     }
     private void checkPermissions(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;

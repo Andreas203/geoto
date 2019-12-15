@@ -12,5 +12,8 @@
 
     <string name="action_settings">Settings</string>
 
+    <string name="extended_fab_label1">Start Path</string>
+    <string name="extended_fab_label2">End Path</string>
+
 
 </resources>

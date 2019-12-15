@@ -1,18 +1,14 @@
-package com.example.geoto.ui.main;
+package com.example.geoto;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,14 +16,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.geoto.PageViewModel;
-import com.example.geoto.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,9 +35,6 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import pl.aprilapps.easyphotopicker.EasyImage;
-
-import static android.content.Context.SENSOR_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -143,7 +133,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         startLocationUpdates();
         barometer.startSensingPressure();
         thermometer.startSensingPressure();
-
     }
 
 

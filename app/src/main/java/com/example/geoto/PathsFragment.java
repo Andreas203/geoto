@@ -1,4 +1,4 @@
-package com.example.geoto.ui.main;
+package com.example.geoto;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-
-import com.example.geoto.PageViewModel;
-import com.example.geoto.R;
 
 /**
  * A placeholder fragment containing a simple view.

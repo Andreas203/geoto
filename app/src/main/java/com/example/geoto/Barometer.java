@@ -1,4 +1,4 @@
-package com.example.geoto.ui.main;
+package com.example.geoto;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -8,37 +8,36 @@ import android.hardware.SensorManager;
 import android.os.SystemClock;
 import android.util.Log;
 
-public class Thermometer {
-    private static final String TAG = Thermometer.class.getSimpleName();
+public class Barometer {
+    private static final String TAG = Barometer.class.getSimpleName();
     private long mSamplingRateInMSecs;
     private long mSamplingRateNano;
     private SensorEventListener mPressureListener = null;
     private SensorManager mSensorManager;
-    private Sensor mThermometerSensor;
+    private Sensor mBarometerSensor;
     private long timePhoneWasLastRebooted = 0;
-    private long THERMOMETER_READING_FREQUENCY = 10000;
+    private long BAROMETER_READING_FREQUENCY = 30000;
     private long lastReportTime = 0;
 
-    public Thermometer(Context context) {
+    public Barometer(Context context) {
         // http://androidforums.com/threads/how-to-get-time-of-last-system-boot.548661/
         timePhoneWasLastRebooted = System.currentTimeMillis() -
                 SystemClock.elapsedRealtime();
-        mSamplingRateNano = (long) (THERMOMETER_READING_FREQUENCY) * 1000000;
-        mSamplingRateInMSecs = (long) THERMOMETER_READING_FREQUENCY;
-        mSamplingRateInMSecs = (long) THERMOMETER_READING_FREQUENCY;
+        mSamplingRateNano = (long) (BAROMETER_READING_FREQUENCY) * 1000000;
+        mSamplingRateInMSecs = (long) BAROMETER_READING_FREQUENCY;
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        mThermometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
-        initThermometerListener();
+        mBarometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
+        initBarometerListener();
     }
 
     /**
      * it inits the listener and establishes the actions to take when a reading is available
      */
-    private void initThermometerListener() {
+    private void initBarometerListener() {
         if (!standardPressureSensorAvailable()) {
-            Log.d(TAG, "Standard Thermometer unavailable");
+            Log.d(TAG, "Standard Barometer unavailable");
         } else {
-            Log.d(TAG, "Using Thermometer");
+            Log.d(TAG, "Using Barometer");
             mPressureListener = new SensorEventListener() {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
@@ -50,7 +49,7 @@ public class Thermometer {
                         long actualTimeInMseconds = timePhoneWasLastRebooted + (long) (event.timestamp / 1000000.0);
                         float pressureValue = event.values[0];
                         int accuracy = event.accuracy;
-                        Log.i(TAG, mSecsToString(actualTimeInMseconds) + ": current temperature: " +
+                        Log.i(TAG, mSecsToString(actualTimeInMseconds) + ": current barometric pressure: " +
                                 pressureValue + "with accuract: " + accuracy);
                         lastReportTime = event.timestamp;
                     }
@@ -68,25 +67,25 @@ public class Thermometer {
     }
 
     public boolean standardPressureSensorAvailable() {
-        return (mThermometerSensor != null);
+        return (mBarometerSensor != null);
     }
     /** * it starts the pressure monitoring */
     public void startSensingPressure() {
         // if the sensor is null,then mSensorManager is null and we get a crash
         if (standardPressureSensorAvailable()) {
-            Log.d("Standard Thermometer", "starting listener");
+            Log.d("Standard Barometer", "starting listener");
             // delay is in microseconds (1millisecond=1000 microseconds)
             // it does not seem to work though
-            //stopThermometer();
+            //stopBarometer();
             // otherwise we stop immediately because
-            mSensorManager.registerListener(mPressureListener, mThermometerSensor,
+            mSensorManager.registerListener(mPressureListener, mBarometerSensor,
                     (int) (mSamplingRateInMSecs * 1000));
         } else {
-            Log.i(TAG, "Thermometer unavailable or already active");}}
-    /** * this stops the Thermometer */
-    public void stopThermometer() {
+            Log.i(TAG, "barometer unavailable or already active");}}
+    /** * this stops the barometer */
+    public void stopBarometer() {
         if (standardPressureSensorAvailable()) {
-            Log.d("Standard Thermometer", "Stopping listener");
+            Log.d("Standard Barometer", "Stopping listener");
             try {
                 mSensorManager.unregisterListener(mPressureListener);
             } catch (Exception e) {

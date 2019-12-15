@@ -56,8 +56,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     private Barometer barometer;
 
     private LatLng place1 = null;
-
-    private LatLng place2 = new LatLng(53.2218, 1.6731);;
+    private LatLng place2 = null;
 
 
     public static NewVisitFragment newInstance(int index) {
@@ -200,6 +199,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.new_visit_main, container, false);
         barometer = new Barometer(getContext());
+
         mButtonStart = (Button) root.findViewById(R.id.button_start);
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override

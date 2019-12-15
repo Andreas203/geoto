@@ -40,16 +40,10 @@ public class MainView extends AppCompatActivity {
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 7829;
     public static boolean dark;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-
 //        setTheme(R.style.Trash);
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

@@ -11,9 +11,30 @@
     android:background="#000000"
     tools:context="com.example.geoto.MainView">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_sort_images"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/fab_margin"
+        android:hapticFeedbackEnabled="true"
+        android:src="@drawable/ic_sort_white_24dp"
+        app:backgroundTint="@color/colorAccent"
+        app:fabSize="normal" />
+
     <include
+        android:id="@+id/include"
         layout="@layout/content_camera"
         android:background="#000000" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frame_layout_for_sort"
+        android:layout_width="334dp"
+        android:layout_height="311dp"
+        android:background="#FDFDFD"
+        android:visibility="visible"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="center"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

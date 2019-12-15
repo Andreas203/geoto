@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -40,6 +41,10 @@ public class GalleryFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private List<ImageElement> myPictureList = new ArrayList<>();
+
+    private FloatingActionButton fab_sort_images;
+    private View frame_layout_for_sort;
+
 
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2987;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 7829;
@@ -79,6 +84,21 @@ public class GalleryFragment extends Fragment {
 
         initData();
 
+        // Sort images thing
+        fab_sort_images = (FloatingActionButton) root.findViewById(R.id.fab_sort_images);
+        frame_layout_for_sort = root.findViewById(R.id.frame_layout_for_sort);
+        fab_sort_images.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (frame_layout_for_sort.getVisibility() == View.VISIBLE) {
+                    frame_layout_for_sort.setVisibility(View.INVISIBLE);
+                } else {
+                    frame_layout_for_sort.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
         // required by Android 6.0 +
 //        checkPermissions(container.getContext());
 
@@ -109,30 +129,7 @@ public class GalleryFragment extends Fragment {
         myPictureList.add(new ImageElement(R.drawable.joe1));
         myPictureList.add(new ImageElement(R.drawable.joe2));
         myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
+
 
     }
     private void checkPermissions(final Context context) {
@@ -238,4 +235,5 @@ public class GalleryFragment extends Fragment {
 //    public Activity getActivity() {
 //        return activity;
 //    }
+    
 }

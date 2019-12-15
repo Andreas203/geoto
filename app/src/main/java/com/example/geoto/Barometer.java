@@ -1,4 +1,4 @@
-package com.example.geoto.ui.main;
+package com.example.geoto;
 
 import android.content.Context;
 import android.hardware.Sensor;

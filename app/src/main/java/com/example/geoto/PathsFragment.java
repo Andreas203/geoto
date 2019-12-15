@@ -1,4 +1,4 @@
-package com.example.geoto.ui.main;
+package com.example.geoto;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.geoto.GalleryAdapter;
 import com.example.geoto.PageViewModel;
 import com.example.geoto.PathsAdapter;
 import com.example.geoto.R;

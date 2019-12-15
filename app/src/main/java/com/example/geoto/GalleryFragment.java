@@ -43,6 +43,8 @@ public class GalleryFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private List<ImageElement> myPictureList = new ArrayList<>();
 
+    private FloatingActionButton fabImageSort;
+
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2987;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 7829;
 
@@ -80,6 +82,15 @@ public class GalleryFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
         initData();
+
+        // Sort images thing
+        fabImageSort = root.findViewById(R.id.fab_sort_images);
+        fabImageSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EasyImage.openCamera(getActivity(), 0);
+            }
+        });
 
         // required by Android 6.0 +
 //        checkPermissions(container.getContext());

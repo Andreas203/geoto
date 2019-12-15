@@ -23,11 +23,19 @@
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_end"
             android:layout_width="wrap_content"
-            android:theme="@style/Theme.MaterialComponents"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
             android:layout_gravity="bottom|center"
-            android:text="@string/extended_fab_label2" />
+            android:layout_margin="@dimen/fab_margin"
+            android:padding="10dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
+            android:text="@string/extended_fab_label2"
+            android:textAlignment="center"
+            android:theme="@style/Theme.MaterialComponents" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_camera"
@@ -53,10 +61,18 @@
             android:id="@+id/button_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:theme="@style/Theme.MaterialComponents"
-            android:layout_margin="@dimen/fab_margin"
             android:layout_gravity="bottom|center"
-            android:text="@string/extended_fab_label1" />
+            android:layout_margin="@dimen/fab_margin"
+            android:padding="10dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
+            android:text="@string/extended_fab_label1"
+            android:textAlignment="center"
+            android:theme="@style/Theme.MaterialComponents" />
 
     </FrameLayout>
 

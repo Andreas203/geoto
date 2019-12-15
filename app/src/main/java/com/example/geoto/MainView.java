@@ -73,6 +73,9 @@ public class MainView extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
+
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -89,8 +92,6 @@ public class MainView extends AppCompatActivity {
             System.out.println("The settings button has been pressed!");
             startActivity(new Intent(this, Settings.class));
             return true;
-
-
 
         }
 

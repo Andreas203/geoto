@@ -237,4 +237,5 @@ public class GalleryFragment extends Fragment {
 //    public Activity getActivity() {
 //        return activity;
 //    }
+    
 }

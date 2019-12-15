@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -43,7 +44,9 @@ public class GalleryFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private List<ImageElement> myPictureList = new ArrayList<>();
 
-    private FloatingActionButton fabImageSort;
+    private FloatingActionButton fab_sort_images;
+    private View frame_layout_for_sort;
+
 
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2987;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 7829;
@@ -84,13 +87,19 @@ public class GalleryFragment extends Fragment {
         initData();
 
         // Sort images thing
-        fabImageSort = root.findViewById(R.id.fab_sort_images);
-        fabImageSort.setOnClickListener(new View.OnClickListener() {
+        fab_sort_images = (FloatingActionButton) root.findViewById(R.id.fab_sort_images);
+        frame_layout_for_sort = root.findViewById(R.id.frame_layout_for_sort);
+        fab_sort_images.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EasyImage.openCamera(getActivity(), 0);
+                if (frame_layout_for_sort.getVisibility() == View.VISIBLE) {
+                    frame_layout_for_sort.setVisibility(View.INVISIBLE);
+                } else {
+                    frame_layout_for_sort.setVisibility(View.VISIBLE);
+                }
             }
         });
+
 
         // required by Android 6.0 +
 //        checkPermissions(container.getContext());

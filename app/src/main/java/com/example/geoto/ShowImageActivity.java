@@ -24,7 +24,7 @@ public class ShowImageActivity extends AppCompatActivity {
             position = b.getInt("position");
             if (position!=-1){
                 ImageView imageView = (ImageView) findViewById(R.id.image);
-                ImageElement element= MyAdapter.getItems().get(position);
+                ImageElement element= GalleryAdapter.getItems().get(position);
                 if (element.image!=-1) {
                     imageView.setImageResource(element.image);
                 } else if (element.file!=null) {

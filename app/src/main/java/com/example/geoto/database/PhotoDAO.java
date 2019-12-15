@@ -6,6 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import java.util.List;
+
 @Dao
 public interface PhotoDAO {
     @Insert
@@ -19,7 +21,7 @@ public interface PhotoDAO {
 
     // it selects a random element
     @Query("SELECT * FROM photoData")
-    LiveData<PhotoData> getAllPhotos();
+    LiveData<List<PhotoData>> getAllPhotos();
 
     @Delete
     void deleteAll(PhotoData... photoData);

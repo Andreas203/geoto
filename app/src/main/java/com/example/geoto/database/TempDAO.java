@@ -6,6 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import java.util.List;
+
 @Dao
 public interface TempDAO {
     @Insert
@@ -19,7 +21,7 @@ public interface TempDAO {
 
     // it selects a random element
     @Query("SELECT * FROM tempData")
-    LiveData<TempData> getAllTemps();
+    LiveData<List<TempData>> getAllTemps();
 
     @Delete
     void deleteAll(TempData... tempData);

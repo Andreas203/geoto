@@ -25,8 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +74,7 @@ public class GalleryFragment extends Fragment {
         RecyclerView mRecyclerView = root.findViewById(R.id.grid_recycler_view);
         int numberOfColumns = 4;
         mRecyclerView.setLayoutManager(new GridLayoutManager(container.getContext(), numberOfColumns));
-        mAdapter = new MyAdapter(myPictureList);
+        mAdapter = new GalleryAdapter(myPictureList);
         mRecyclerView.setAdapter(mAdapter);
 
         initData();

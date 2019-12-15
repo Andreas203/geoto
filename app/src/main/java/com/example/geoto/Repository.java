@@ -18,6 +18,7 @@ import com.example.geoto.database.PressureData;
 import com.example.geoto.database.TempDAO;
 import com.example.geoto.database.TempData;
 
+import java.util.List;
 import java.util.Random;
 
 class Repository extends ViewModel {
@@ -40,21 +41,27 @@ class Repository extends ViewModel {
      * it gets all types of data when changed in the db and returns it to the ViewModel
      * @return
      */
-    public LiveData<PhotoData> getAllPhotos() {
+    public LiveData<List<PhotoData>> getAllPhotos() {
         return photoDao.getAllPhotos();
     }
-    public LiveData<PathData> getAllPaths() {
+    public LiveData<List<PathData>> getAllPaths() {
         return pathDao.getAllPaths();
     }
-    public LiveData<LocationData> getAllLocations() {
+    public LiveData<List<LocationData>> getAllLocations() {
         return locationDao.getAllLocations();
     }
-    public LiveData<PressureData> getAllPressures() {
+    public LiveData<List<PressureData>> getAllPressures() {
         return pressureDao.getAllPressures();
     }
-    public LiveData<TempData> getAllTemps() {
+    public LiveData<List<TempData>> getAllTemps() {
         return tempDao.getAllTemps();
     }
+
+    public void insertPhoto(PhotoData photo) { new insertPhotoAsyncTask(photoDao).execute(photo);    }
+    public void insertPath(PathData path) { new insertPathAsyncTask(pathDao).execute(path);    }
+    public void insertLocation(LocationData location) { new insertLocationAsyncTask(locationDao).execute(location);    }
+    public void insertPressure(PressureData pressure) { new insertPressureAsyncTask(pressureDao).execute(pressure);    }
+    public void insertTemp(TempData temp) { new insertTempAsyncTask(tempDao).execute(temp);    }
 
     // Insert photo
     private static class insertPhotoAsyncTask extends AsyncTask<PhotoData, Void, Void> {

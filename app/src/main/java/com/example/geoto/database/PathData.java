@@ -11,11 +11,11 @@ import java.util.Date;
 public class PathData {
     @PrimaryKey(autoGenerate = true)
     @androidx.annotation.NonNull
-    private int pathId=0;
-    private String title;
-    private Date startDate;
-    private Date endDate;
-    private String description;
+    public int pathId=0;
+    public String title;
+    public Date startDate;
+    public Date endDate;
+    public String description;
 
 
     public PathData(String title, Date startDate, Date endDate, String description) {

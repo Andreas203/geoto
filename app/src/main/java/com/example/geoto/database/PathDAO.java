@@ -6,6 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import java.util.List;
+
 @Dao
 public interface PathDAO {
     @Insert
@@ -19,7 +21,7 @@ public interface PathDAO {
 
     // it selects a random element
     @Query("SELECT * FROM pathData")
-    LiveData<PathData> getAllPaths();
+    LiveData<List<PathData>> getAllPaths();
 
     @Delete
     void deleteAll(PathData... pathData);

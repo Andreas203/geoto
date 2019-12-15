@@ -6,6 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import java.util.List;
+
 @Dao
 public interface LocationDAO {
     @Insert
@@ -19,7 +21,7 @@ public interface LocationDAO {
 
     // it selects a random element
     @Query("SELECT * FROM locationData")
-    LiveData<LocationData> getAllLocations();
+    LiveData<List<LocationData>> getAllLocations();
 
     @Delete
     void deleteAll(LocationData... locationData);

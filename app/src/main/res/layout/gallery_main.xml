@@ -11,6 +11,16 @@
     android:background="#000000"
     tools:context="com.example.geoto.MainView">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_sort_images"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_menu_white_24dp"
+        app:backgroundTint="@color/colorAccent"
+        app:fabSize="normal" />
+
     <include
         layout="@layout/content_camera"
         android:background="#000000" />

@@ -265,6 +265,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(), "New visit started!", Toast.LENGTH_SHORT).show();
                 startDate = new Date();
                 startLocationUpdates();
                 barometer.startSensingPressure();
@@ -285,6 +286,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(), "Visit stopped!", Toast.LENGTH_SHORT).show();
                 Date endDate = new Date();
                 stopLocationUpdates();
                 // Removes all markers, overlays, and polylines from the map.

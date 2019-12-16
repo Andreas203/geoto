@@ -17,6 +17,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.geoto.database.LocationData;
+import com.example.geoto.database.PathData;
+import com.example.geoto.database.PressureData;
+import com.example.geoto.database.TempData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -62,6 +65,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
     private LatLng place1 = null;
     private LatLng place2 = null;
+    private Date startDate;
 
 
     public static NewVisitFragment newInstance(int index) {
@@ -72,8 +76,16 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         return fragment;
     }
 
-    public void storePressureTemp(Barometer barometer, Thermometer thermometer, Date date) {
+    public void storePressure(float pressure, Date date) {
 
+        PressureData pressureData = new PressureData(pressure, date);
+        pageViewModel.insertPressure(pressureData);
+    }
+
+    public void storeTemp(float temp, Date date) {
+
+        TempData tempData = new TempData(temp, date);
+        pageViewModel.insertTemp(tempData);
     }
 
     public void storeLocation(Location location, Date date) {
@@ -223,8 +235,8 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.new_visit_main, container, false);
-        barometer = new Barometer(getContext());
-        thermometer = new Thermometer(getContext());
+        barometer = new Barometer(getContext(), this);
+        thermometer = new Thermometer(getContext(), this);
 
         fabCamera = (FloatingActionButton) root.findViewById(R.id.fab_camera);
         fabCamera.setOnClickListener(new View.OnClickListener() {
@@ -248,9 +260,11 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startDate = new Date();
                 startLocationUpdates();
                 barometer.startSensingPressure();
                 thermometer.startSensingTemperature();
+
                 if (mButtonEnd != null)
                     mButtonEnd.setEnabled(true);
                 mButtonStart.setEnabled(false);
@@ -266,6 +280,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Date endDate = new Date();
                 stopLocationUpdates();
                 // Removes all markers, overlays, and polylines from the map.
                 googleMap.clear();
@@ -273,6 +288,12 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
                 barometer.stopBarometer();
                 thermometer.stopThermometer();
+
+                // GET A TITLE AND DESCRIPTION OF THE PATH FROM THE USER ////////////////////////////
+
+                PathData pathData = new PathData("new title", startDate, endDate, "fun path");
+                pageViewModel.insertPath(pathData);
+
                 if (mButtonStart != null)
                     mButtonStart.setEnabled(true);
                 mButtonEnd.setEnabled(false);

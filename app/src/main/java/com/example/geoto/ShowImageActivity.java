@@ -11,6 +11,8 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.geoto.database.PhotoData;
+
 public class ShowImageActivity extends AppCompatActivity {
 
     @Override
@@ -24,11 +26,9 @@ public class ShowImageActivity extends AppCompatActivity {
             position = b.getInt("position");
             if (position!=-1){
                 ImageView imageView = (ImageView) findViewById(R.id.image);
-                ImageElement element= GalleryAdapter.getItems().get(position);
-                if (element.image!=-1) {
-                    imageView.setImageResource(element.image);
-                } else if (element.file!=null) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(element.file.getAbsolutePath());
+                PhotoData element = GalleryAdapter.getItems().get(position);
+                if (element.getAbsolutePath()!=null) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(element.getAbsolutePath());
                     imageView.setImageBitmap(myBitmap);
                 }
             }

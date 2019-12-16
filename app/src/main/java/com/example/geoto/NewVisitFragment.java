@@ -11,11 +11,15 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
+
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -111,6 +115,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
         int index = 1;
@@ -270,6 +275,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(), "New visit started!", Toast.LENGTH_SHORT).show();
                 startDate = new Date();
                 startLocationUpdates();
                 barometer.startSensingPressure();
@@ -292,6 +298,9 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 endDate = new Date();
+
+                Toast.makeText(getContext(), "Visit stopped!", Toast.LENGTH_SHORT).show();
+
                 stopLocationUpdates();
                 // Removes all markers, overlays, and polylines from the map.
                 googleMap.clear();
@@ -371,5 +380,27 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap map) {
         googleMap = map;
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //inflate menu
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.findItem(R.id.action_sort).setVisible(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //handle menu item clicks
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            //do your function here
+            Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 }

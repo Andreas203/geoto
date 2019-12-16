@@ -11,9 +11,13 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -23,6 +27,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.geoto.database.PhotoData;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
@@ -30,6 +35,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,7 +48,7 @@ public class GalleryFragment extends Fragment {
     private PageViewModel pageViewModel;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private List<ImageElement> myPictureList = new ArrayList<>();
+    private List<PhotoData> myPictureList = new ArrayList<>();
 
     private FloatingActionButton fab_sort_images;
     private View frame_layout_for_sort;
@@ -63,6 +69,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
         int index = 1;
         if (getArguments() != null) {
@@ -84,56 +91,9 @@ public class GalleryFragment extends Fragment {
         mAdapter = new GalleryAdapter(myPictureList);
         mRecyclerView.setAdapter(mAdapter);
 
-        initData();
-
-        // Sort images thing
-        fab_sort_images = (FloatingActionButton) root.findViewById(R.id.fab_sort_images);
-        frame_layout_for_sort = root.findViewById(R.id.frame_layout_for_sort);
-        fab_sort_images.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (frame_layout_for_sort.getVisibility() == View.VISIBLE) {
-                    frame_layout_for_sort.setVisibility(View.INVISIBLE);
-                } else {
-                    frame_layout_for_sort.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-
-        // required by Android 6.0 +
-//        checkPermissions(container.getContext());
-
-
-
         return root;
     }
 
-    private void initData() {
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-
-
-    }
     private void checkPermissions(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
@@ -215,27 +175,72 @@ public class GalleryFragment extends Fragment {
      * @param returnedPhotos
      */
     private void onPhotosReturned(List<File> returnedPhotos) {
-        myPictureList.addAll(getImageElements(returnedPhotos));
+        List<PhotoData> returnedDataList = new ArrayList<>();
+
+        for (int i = 0; i < returnedPhotos.size(); i++) {
+            String path = returnedPhotos.get(i).getAbsolutePath();
+            Date date = new Date();
+
+            PhotoData photo = new PhotoData(path, date);
+            returnedDataList.add(photo);
+        }
+
+        myPictureList.addAll(returnedDataList);
         mAdapter.notifyDataSetChanged();
         mRecyclerView.scrollToPosition(returnedPhotos.size() - 1);
     }
 
-    /**
-     * given a list of photos, it creates a list of myElements
-     * @param returnedPhotos
-     * @return
-     */
-    private List<ImageElement> getImageElements(List<File> returnedPhotos) {
-        List<ImageElement> imageElementList= new ArrayList<>();
-        for (File file: returnedPhotos){
-            ImageElement element= new ImageElement(file);
-            imageElementList.add(element);
-        }
-        return imageElementList;
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //inflate menu
+        inflater.inflate(R.menu.menu_main, menu);
+        //hide item (sort)
+        menu.findItem(R.id.action_sort).setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
-//    public Activity getActivity() {
-//        return activity;
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //handle menu item clicks
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            //do your function here
+//            Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "The settings button has been pressed!", Toast.LENGTH_SHORT).show();
+        }
+
+        if (id == R.id.action_sort) {
+            Toast.makeText(getContext(), "The sort button has been pressed!", Toast.LENGTH_SHORT).show();
+            // setup the alert builder
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Choose a sorting style");
+
+            // add a radio button list
+            String[] animals = {"Date: New to Old", "Date: Old to New", "Title: A to Z", "Title Z to A"};
+            int checkedItem = 0; // cow
+            builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // user checked an item
+                }
+            });
+
+            // add OK and Cancel buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // user clicked OK
+                }
+            });
+            builder.setNegativeButton("Cancel", null);
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
     
 }

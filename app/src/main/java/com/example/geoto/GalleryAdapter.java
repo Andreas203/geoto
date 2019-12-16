@@ -15,23 +15,23 @@ import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.geoto.database.PhotoData;
+
 import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Holder> {
     static private Context context;
-    private static List<ImageElement> items;
+    private static List<PhotoData> items;
 
-    public GalleryAdapter(List<ImageElement> items) {
+    public GalleryAdapter(List<PhotoData> items) {
         this.items = items;
     }
 
-    public GalleryAdapter(Context cont, List<ImageElement> items) {
+    public GalleryAdapter(Context cont, List<PhotoData> items) {
         super();
         this.items = items;
         context = cont;
     }
-
-
 
     @Override
     public View_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -39,7 +39,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_image,
                 parent, false);
         View_Holder holder = new View_Holder(v);
-        context= parent.getContext();
+        context = parent.getContext();
         return holder;
     }
 
@@ -49,10 +49,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
         //Use the provided View Holder on the onCreateViewHolder method to populate the
         // current row on the RecyclerView
         if (holder!=null && items.get(position)!=null) {
-            if (items.get(position).image!=-1) {
-                holder.imageView.setImageResource(items.get(position).image);
-            } else if (items.get(position).file!=null){
-                Bitmap myBitmap = BitmapFactory.decodeFile(items.get(position).file.getAbsolutePath());
+            if (items.get(position).getAbsolutePath()!=null) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(items.get(position).getAbsolutePath());
                 holder.imageView.setImageBitmap(myBitmap);
             }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +67,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
 
 
     // convenience method for getting data at click position
-    ImageElement getItem(int id) {
+    PhotoData getItem(int id) {
         return items.get(id);
     }
 
@@ -91,11 +89,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
 
     }
 
-    public static List<ImageElement> getItems() {
+    public static List<PhotoData> getItems() {
         return items;
     }
 
-    public static void setItems(List<ImageElement> items) {
+    public static void setItems(List<PhotoData> items) {
         GalleryAdapter.items = items;
     }
 }

@@ -7,6 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import java.sql.Blob;
 import java.util.Date;
 
 @Entity()
@@ -15,13 +16,14 @@ public class PhotoData {
     @PrimaryKey(autoGenerate = true)
     @androidx.annotation.NonNull
     private int id=0;
-    @Ignore
-    private Bitmap picture;
+    private String absolutePath;
     private Date date;
 
 
-    public PhotoData(Date date) {
+    public PhotoData(String absolutePath, Date date) {
+        this.absolutePath = absolutePath;
         this.date = date;
+        //this.blob = createBlob(picture);
     }
 
     @androidx.annotation.NonNull
@@ -32,11 +34,11 @@ public class PhotoData {
         this.id = id;
     }
 
-    public Bitmap getPicture() {
-        return picture;
+    public String getAbsolutePath() {
+        return absolutePath;
     }
-    public void setPicture(Bitmap picture) {
-        this.picture = picture;
+    public void setAbsolutePath(String absolutePath) {
+        this.absolutePath = absolutePath;
     }
 
     public Date getDate() {
@@ -45,4 +47,9 @@ public class PhotoData {
     public void setDate(Date date) {
         this.date = date;
     }
+
+//    private Blob createBlob(Bitmap picture) {
+//
+//        return newBlob;
+//    }
 }

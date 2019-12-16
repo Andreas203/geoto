@@ -6,6 +6,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
@@ -26,10 +31,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.geoto.database.LocationData;
 import com.example.geoto.database.PathData;
+import com.example.geoto.database.PhotoData;
 import com.example.geoto.database.PressureData;
 import com.example.geoto.database.TempData;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -40,6 +47,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -47,15 +55,21 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 
+import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
+
+    Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+    Bitmap bmp = Bitmap.createBitmap(80, 80, conf);
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final int ACCESS_FINE_LOCATION = 123;
@@ -191,9 +205,15 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             Log.i("MAP", "new location " + mCurrentLocation.toString());
             place2 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             if (googleMap != null)
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
-                        .title(mLastUpdateTime));
+
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
+                        .title(mLastUpdateTime)
+                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                        // Specifies the anchor to be at a particular point in the marker image.
+                        .anchor(0.5f, 1));
             //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
+
             if(place1 != null)
                 googleMap.addPolyline(new PolylineOptions()
                         .clickable(true)
@@ -244,11 +264,24 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
     }
 
+
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.new_visit_main, container, false);
+
+
+//        pageViewModel.getPhotoDataToDisplay().observe(this, new Observer<List<PhotoData>>(){
+//            @Override
+//            public void onChanged(@Nullable final List<PhotoData> myPictureList) {
+//                mAdapter = new GalleryAdapter(myPictureList);
+//                mRecyclerView.setAdapter(mAdapter);
+//            }});
+
+
+
+
         barometer = new Barometer(getContext(), this);
         thermometer = new Thermometer(getContext(), this);
 
@@ -384,6 +417,14 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
         menu.findItem(R.id.action_sort).setVisible(false);
+    }
+
+    public void  setMarkerImg(PhotoData photoData){
+        Bitmap bmp = BitmapFactory.decodeFile(photoData.getAbsolutePath());
+        googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
+                .title(mLastUpdateTime)
+                .icon(BitmapDescriptorFactory.fromBitmap(bmp)));
     }
 
     @Override

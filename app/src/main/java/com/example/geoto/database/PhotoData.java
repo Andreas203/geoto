@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Entity()
 @TypeConverters({Converters.class})
-public class PhotoData {
+public class PhotoData implements Comparable<PhotoData> {
     @PrimaryKey(autoGenerate = true)
     @androidx.annotation.NonNull
     private int id=0;
@@ -45,5 +45,17 @@ public class PhotoData {
     }
     public void setDate(Date date) {
         this.date = date;
+    }
+
+
+    @Override
+    public int compareTo(PhotoData o) {
+        if (date.compareTo(o.getDate()) > 0) {
+            return 1;
+        } else if (date.compareTo(o.getDate()) <0) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

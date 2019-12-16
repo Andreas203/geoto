@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.geoto.database.PhotoData;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Holder> {
@@ -27,10 +29,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
         this.items = items;
     }
 
-    public GalleryAdapter(Context cont, List<PhotoData> items) {
+    public GalleryAdapter() {
         super();
-        this.items = items;
-        context = cont;
+        items = new ArrayList<>();
     }
 
     @Override
@@ -87,6 +88,17 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
         }
 
 
+    }
+
+    public void sortGallery(int sortCode) {
+        if ((items.size()) > 0) {
+            if (sortCode == 0) {
+                Collections.sort(items);
+            }
+            if (sortCode == 1) {
+                Collections.sort(items, Collections.reverseOrder());
+            }
+        }
     }
 
     public static List<PhotoData> getItems() {

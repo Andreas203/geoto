@@ -14,18 +14,22 @@
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/map"
-            android:layout_width="400dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="80dp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="171dp" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_end"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/fab_margin"
+            android:backgroundTint="#E57373"
             android:padding="10dp"
             android:paddingStart="0dp"
             android:paddingLeft="0dp"
@@ -59,10 +63,11 @@
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_start"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/fab_margin"
+            android:backgroundTint="#81C784"
             android:padding="10dp"
             android:paddingStart="0dp"
             android:paddingLeft="0dp"

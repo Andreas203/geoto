@@ -37,8 +37,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         else {
             return PathsFragment.newInstance(position + 1);
         }
-
     }
+
 
     @Nullable
     @Override

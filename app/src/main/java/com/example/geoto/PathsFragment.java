@@ -2,6 +2,8 @@ package com.example.geoto;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -42,14 +44,22 @@ public class PathsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
         int index = 2;
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         pageViewModel.setIndex(index);
+    }
 
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //inflate menu
+        inflater.inflate(R.menu.menu_main, menu);
+        //hide item (sort)
+        menu.findItem(R.id.action_sort).setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

@@ -295,6 +295,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                 Toast.makeText(getContext(), "New visit started!", Toast.LENGTH_SHORT).show();
                 startDate = new Date();
                 startLocationUpdates();
+                googleMap.setMyLocationEnabled(true);
                 barometer.startSensingPressure();
                 thermometer.startSensingTemperature();
 
@@ -393,7 +394,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
-        googleMap.setMyLocationEnabled(true);
 
     }
 

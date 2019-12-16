@@ -48,6 +48,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
         // current row on the RecyclerView
         if (holder!=null && items.get(position)!=null) {
             holder.title.setText(items.get(position).title);
+            holder.description.setText(items.get(position).description);
             holder.date.setText(newDate);
         }
         //animate(holder);
@@ -60,11 +61,13 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
 
     public class View_Holder extends RecyclerView.ViewHolder {
         TextView title;
+        TextView description;
         TextView date;
 
         View_Holder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.path_title);
+            description = (TextView) itemView.findViewById(R.id.path_description);
             date = (TextView) itemView.findViewById(R.id.start_date);
         }
     }

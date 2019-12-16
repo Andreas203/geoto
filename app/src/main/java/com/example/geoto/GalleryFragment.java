@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.geoto.database.PhotoData;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
@@ -30,6 +33,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,7 +46,7 @@ public class GalleryFragment extends Fragment {
     private PageViewModel pageViewModel;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private List<ImageElement> myPictureList = new ArrayList<>();
+    private List<PhotoData> myPictureList = new ArrayList<>();
 
     private FloatingActionButton fab_sort_images;
     private View frame_layout_for_sort;
@@ -84,8 +88,6 @@ public class GalleryFragment extends Fragment {
         mAdapter = new GalleryAdapter(myPictureList);
         mRecyclerView.setAdapter(mAdapter);
 
-        initData();
-
         // Sort images thing
         fab_sort_images = (FloatingActionButton) root.findViewById(R.id.fab_sort_images);
         frame_layout_for_sort = root.findViewById(R.id.frame_layout_for_sort);
@@ -109,31 +111,6 @@ public class GalleryFragment extends Fragment {
         return root;
     }
 
-    private void initData() {
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-        myPictureList.add(new ImageElement(R.drawable.joe1));
-        myPictureList.add(new ImageElement(R.drawable.joe2));
-        myPictureList.add(new ImageElement(R.drawable.joe3));
-
-
-    }
     private void checkPermissions(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
@@ -215,27 +192,19 @@ public class GalleryFragment extends Fragment {
      * @param returnedPhotos
      */
     private void onPhotosReturned(List<File> returnedPhotos) {
-        myPictureList.addAll(getImageElements(returnedPhotos));
+        List<PhotoData> returnedDataList = new ArrayList<>();
+
+        for (int i=0; i<returnedPhotos.size(); i++) {
+            String path = returnedPhotos.get(i).getAbsolutePath();
+            Date date = new Date();
+
+            PhotoData photo =  new PhotoData(path, date);
+            returnedDataList.add(photo);
+        }
+
+        myPictureList.addAll(returnedDataList);
         mAdapter.notifyDataSetChanged();
         mRecyclerView.scrollToPosition(returnedPhotos.size() - 1);
     }
-
-    /**
-     * given a list of photos, it creates a list of myElements
-     * @param returnedPhotos
-     * @return
-     */
-    private List<ImageElement> getImageElements(List<File> returnedPhotos) {
-        List<ImageElement> imageElementList= new ArrayList<>();
-        for (File file: returnedPhotos){
-            ImageElement element= new ImageElement(file);
-            imageElementList.add(element);
-        }
-        return imageElementList;
-    }
-
-//    public Activity getActivity() {
-//        return activity;
-//    }
     
 }

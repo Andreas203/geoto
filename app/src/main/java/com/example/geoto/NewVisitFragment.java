@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.geoto.database.LocationData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -69,6 +70,21 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    public void storePressureTemp(Barometer barometer, Thermometer thermometer, Date date) {
+
+    }
+
+    public void storeLocation(Location location, Date date) {
+        double lat = location.getLatitude();
+        double lon = location.getLongitude();
+        float acc = location.getAccuracy();
+
+
+        LocationData locationData = new LocationData(lat, lon, acc, date);
+        pageViewModel.insertLocation(locationData);
+
     }
 
 
@@ -144,6 +160,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
             mCurrentLocation = locationResult.getLastLocation();
+            Date date = new Date();
             mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
             Log.i("MAP", "new location " + mCurrentLocation.toString());
             place2 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
@@ -159,6 +176,9 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                                 place2)
                 );
                 place1 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                if (mCurrentLocation != null) {
+                    storeLocation(mCurrentLocation, date);
+                }
         }
     };
 

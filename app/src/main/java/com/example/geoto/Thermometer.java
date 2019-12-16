@@ -8,6 +8,8 @@ import android.hardware.SensorManager;
 import android.os.SystemClock;
 import android.util.Log;
 
+import java.util.Date;
+
 public class Thermometer {
     private static final String TAG = Thermometer.class.getSimpleName();
     private long mSamplingRateInMSecs;
@@ -19,6 +21,7 @@ public class Thermometer {
     private long THERMOMETER_READING_FREQUENCY = 20000;
     private long lastReportTime = 0;
     private float temperatureValue;
+    private Date date;
 
     public Thermometer(Context context) {
         // http://androidforums.com/threads/how-to-get-time-of-last-system-boot.548661/
@@ -50,6 +53,7 @@ public class Thermometer {
                         // see next slide
                         long actualTimeInMseconds = timePhoneWasLastRebooted + (long) (event.timestamp / 1000000.0);
                         temperatureValue = event.values[0];
+                        date = new Date();
                         int accuracy = event.accuracy;
                         Log.i(TAG, mSecsToString(actualTimeInMseconds) + ": current temperature: " +
                                 temperatureValue + "with accuracy: " + accuracy);
@@ -66,6 +70,10 @@ public class Thermometer {
 
     public float getTempValue(){
         return temperatureValue;
+    }
+
+    public Date getDate(){
+        return date;
     }
 
     private String mSecsToString(long actualTimeInMseconds) {

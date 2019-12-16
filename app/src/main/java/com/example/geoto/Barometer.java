@@ -8,6 +8,8 @@ import android.hardware.SensorManager;
 import android.os.SystemClock;
 import android.util.Log;
 
+import java.util.Date;
+
 public class Barometer {
     private static final String TAG = Barometer.class.getSimpleName();
     private long mSamplingRateInMSecs;
@@ -18,6 +20,7 @@ public class Barometer {
     private long timePhoneWasLastRebooted = 0;
     private long BAROMETER_READING_FREQUENCY = 20000;
     private long lastReportTime = 0;
+    private Date date;
 
     public Barometer(Context context) {
         // http://androidforums.com/threads/how-to-get-time-of-last-system-boot.548661/

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -39,6 +40,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -51,10 +53,12 @@ public class GalleryFragment extends Fragment {
 
     private PageViewModel pageViewModel;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private GalleryAdapter mAdapter = new GalleryAdapter();
 
     private FloatingActionButton fab_sort_images;
     private View frame_layout_for_sort;
+
+    private int sort = 0;
 
 
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2987;
@@ -91,12 +95,17 @@ public class GalleryFragment extends Fragment {
         final RecyclerView mRecyclerView = root.findViewById(R.id.grid_recycler_view);
         int numberOfColumns = 4;
         mRecyclerView.setLayoutManager(new GridLayoutManager(container.getContext(), numberOfColumns));
+        mRecyclerView.setAdapter(mAdapter);
 
         pageViewModel.getPhotoDataToDisplay().observe(this, new Observer<List<PhotoData>>(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onChanged(@Nullable final List<PhotoData> myPictureList) {
-                mAdapter = new GalleryAdapter(myPictureList);
-                mRecyclerView.setAdapter(mAdapter);
+                mAdapter.setItems(myPictureList);
+                // user clicked OK
+                mAdapter.sortGallery(sort);
+                mAdapter.notifyDataSetChanged();
+                mRecyclerView.scrollToPosition(myPictureList.size() - 1);
             }});
 
         return root;
@@ -204,8 +213,6 @@ public class GalleryFragment extends Fragment {
             pageViewModel.insertPhoto(photo);
         }
 
-        mAdapter.notifyDataSetChanged();
-        mRecyclerView.scrollToPosition(returnedPhotos.size() - 1);
     }
 
     @Override
@@ -225,22 +232,22 @@ public class GalleryFragment extends Fragment {
         if (id == R.id.action_settings) {
             //do your function here
 //            Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
-            Toast.makeText(getContext(), "The settings button has been pressed!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "The settings button has been pressed!", Toast.LENGTH_SHORT).show();
         }
 
         if (id == R.id.action_sort) {
-            Toast.makeText(getContext(), "The sort button has been pressed!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "The sort button has been pressed!", Toast.LENGTH_SHORT).show();
             // setup the alert builder
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Choose a sorting style");
-
             // add a radio button list
-            String[] animals = {"Date: New to Old", "Date: Old to New", "Title: A to Z", "Title Z to A"};
-            int checkedItem = 0; // cow
+            String[] animals = {"Date: Old to New", "Date: New to Old", "Fuck you Andreas"};
+            final int checkedItem = sort; // cow
             builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    // user checked an item
+
+                    sort = which;
                 }
             });
 
@@ -248,7 +255,11 @@ public class GalleryFragment extends Fragment {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
                     // user clicked OK
+                    mAdapter.sortGallery(sort);
+                    mAdapter.notifyDataSetChanged();
+
                 }
             });
             builder.setNegativeButton("Cancel", null);

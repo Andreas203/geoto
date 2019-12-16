@@ -2,13 +2,21 @@ package com.example.geoto;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,6 +74,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     private LatLng place1 = null;
     private LatLng place2 = null;
     private Date startDate;
+    private Date endDate;
 
 
     public static NewVisitFragment newInstance(int index) {
@@ -257,6 +266,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         fabGallery.hide();
 
         mButtonStart = (ExtendedFloatingActionButton) root.findViewById(R.id.button_start);
+
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,11 +286,12 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         });
         mButtonStart.setEnabled(true);
 
+
         mButtonEnd = (ExtendedFloatingActionButton) root.findViewById(R.id.button_end);
         mButtonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date endDate = new Date();
+                endDate = new Date();
                 stopLocationUpdates();
                 // Removes all markers, overlays, and polylines from the map.
                 googleMap.clear();
@@ -290,9 +301,46 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                 thermometer.stopThermometer();
 
                 // GET A TITLE AND DESCRIPTION OF THE PATH FROM THE USER ////////////////////////////
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                alertDialog.setTitle("Path Information");
+                alertDialog.setMessage("Enter Path Information");
 
-                PathData pathData = new PathData("new title", startDate, endDate, "fun path");
-                pageViewModel.insertPath(pathData);
+                LinearLayout layout = new LinearLayout(getContext());
+                layout.setOrientation(LinearLayout.VERTICAL);
+
+                // Add a TextView here for the "Title" label, as noted in the comments
+                final EditText titleBox = new EditText(getContext());
+                titleBox.setHint("Title");
+                layout.addView(titleBox); // Notice this is an add method
+
+                // Add another TextView here for the "Description" label
+                final EditText descriptionBox = new EditText(getContext());
+                descriptionBox.setHint("Description");
+                layout.addView(descriptionBox); // Another add method
+
+                alertDialog.setView(layout);
+
+                alertDialog.setPositiveButton("Create",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                String pathTitle = titleBox.getText().toString();
+                                String pathDescr = descriptionBox.getText().toString();
+                                PathData pathData = new PathData(pathTitle, startDate, endDate, pathDescr);
+                                pageViewModel.insertPath(pathData);
+
+                            }
+                        });
+
+                alertDialog.setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                alertDialog.show();
+                //Log.d("title",pathTitle);
+
 
                 if (mButtonStart != null)
                     mButtonStart.setEnabled(true);

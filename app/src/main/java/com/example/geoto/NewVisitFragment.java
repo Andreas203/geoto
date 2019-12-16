@@ -297,18 +297,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                endDate = new Date();
-
-                Toast.makeText(getContext(), "Visit stopped!", Toast.LENGTH_SHORT).show();
-
-                stopLocationUpdates();
-                // Removes all markers, overlays, and polylines from the map.
-                googleMap.clear();
-                place1 = null;
-
-                barometer.stopBarometer();
-                thermometer.stopThermometer();
-
                 // GET A TITLE AND DESCRIPTION OF THE PATH FROM THE USER ////////////////////////////
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                 alertDialog.setTitle("Path Information");
@@ -337,6 +325,22 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                                 PathData pathData = new PathData(pathTitle, startDate, endDate, pathDescr);
                                 pageViewModel.insertPath(pathData);
 
+                                Toast.makeText(getContext(), "Visit stopped!", Toast.LENGTH_SHORT).show();
+                                stopLocationUpdates();
+                                // Removes all markers, overlays, and polylines from the map.
+                                googleMap.clear();
+                                place1 = null;
+
+                                barometer.stopBarometer();
+                                thermometer.stopThermometer();
+                                endDate = new Date();
+                                if (mButtonStart != null)
+                                    mButtonStart.setEnabled(true);
+                                mButtonEnd.setEnabled(false);
+                                mButtonEnd.hide();
+                                mButtonStart.show();
+                                fabCamera.hide();
+                                fabGallery.hide();
                             }
                         });
 
@@ -350,14 +354,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                 alertDialog.show();
                 //Log.d("title",pathTitle);
 
-
-                if (mButtonStart != null)
-                    mButtonStart.setEnabled(true);
-                mButtonEnd.setEnabled(false);
-                mButtonEnd.hide();
-                mButtonStart.show();
-                fabCamera.hide();
-                fabGallery.hide();
             }
         });
         mButtonEnd.hide();

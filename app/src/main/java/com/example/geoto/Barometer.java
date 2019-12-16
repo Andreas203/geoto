@@ -18,6 +18,7 @@ public class Barometer {
     private long timePhoneWasLastRebooted = 0;
     private long BAROMETER_READING_FREQUENCY = 20000;
     private long lastReportTime = 0;
+    private float pressureValue;
 
     public Barometer(Context context) {
         // http://androidforums.com/threads/how-to-get-time-of-last-system-boot.548661/
@@ -28,6 +29,10 @@ public class Barometer {
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         mBarometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
         initBarometerListener();
+    }
+
+    public float getPressureValue() {
+        return pressureValue;
     }
 
     /**
@@ -47,7 +52,7 @@ public class Barometer {
                     if (diff >= mSamplingRateNano) {
                         // see next slide
                         long actualTimeInMseconds = timePhoneWasLastRebooted + (long) (event.timestamp / 1000000.0);
-                        float pressureValue = event.values[0];
+                        pressureValue = event.values[0];
                         int accuracy = event.accuracy;
                         Log.i(TAG, mSecsToString(actualTimeInMseconds) + ": current barometric pressure: " +
                                 pressureValue + "with accuract: " + accuracy);

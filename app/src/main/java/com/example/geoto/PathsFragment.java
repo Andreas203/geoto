@@ -70,10 +70,6 @@ public class PathsFragment extends Fragment {
         final RecyclerView mRecyclerView = root.findViewById(R.id.paths_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
 
-        //Temp
-        PathData temp = new PathData("title", new Date(), new Date(), "description");
-        pageViewModel.insertPath(temp);
-
         pageViewModel.getPathDataToDisplay().observe(this, new Observer<List<PathData>>(){
             @Override
             public void onChanged(@Nullable final List<PathData> pathList) {

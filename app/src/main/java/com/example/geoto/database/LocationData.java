@@ -12,12 +12,12 @@ public class LocationData {
     @PrimaryKey(autoGenerate = true)
     @androidx.annotation.NonNull
     private int locationId=0;
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
     private float accuracy;
     private Date date;
 
-    public LocationData(float latitude, float longitude, float accuracy, Date date) {
+    public LocationData(double latitude, double longitude, float accuracy, Date date) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.accuracy = accuracy;
@@ -32,14 +32,14 @@ public class LocationData {
         this.locationId = locationId;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
     public void setLatitude(float latitude) {
         this.latitude = latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
     public void setLongitude(float longitude) {

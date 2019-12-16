@@ -1,6 +1,8 @@
 package com.example.geoto;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder> {
+public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>{
     static private Context context;
     private static List<PathData> items;
 
@@ -50,6 +52,15 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
             holder.title.setText(items.get(position).title);
             holder.description.setText(items.get(position).description);
             holder.date.setText(newDate);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ShowPathActivity.class);
+                    intent.putExtra("position", position);
+                    context.startActivity(intent);
+                }
+            });
         }
         //animate(holder);
     }
@@ -58,6 +69,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
     public int getItemCount() {
         return items.size();
     }
+
 
     public class View_Holder extends RecyclerView.ViewHolder {
         TextView title;

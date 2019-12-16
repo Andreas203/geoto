@@ -13,6 +13,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Settings"></activity>
         <activity android:name=".ShowImageActivity" />
+        <activity android:name=".ShowPathActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

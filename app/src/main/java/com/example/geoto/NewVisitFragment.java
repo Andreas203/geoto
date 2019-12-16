@@ -69,8 +69,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
  */
 public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
-    Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-    Bitmap bmp = Bitmap.createBitmap(80, 80, conf);
+
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final int ACCESS_FINE_LOCATION = 123;
@@ -187,9 +186,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-//        startLocationUpdates();
-//        barometer.startSensingPressure();
-//        thermometer.startSensingTemperature();
+
     }
 
 
@@ -394,7 +391,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
-
     }
 
     @Override
@@ -405,13 +401,35 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         menu.findItem(R.id.action_sort).setVisible(false);
     }
 
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
     public void  setMarkerImg(PhotoData photoData){
+
         Bitmap bmp = BitmapFactory.decodeFile(photoData.getAbsolutePath());
+
+        getResizedBitmap(bmp,5);
+
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
                 .title(mLastUpdateTime)
                 .icon(BitmapDescriptorFactory.fromBitmap(bmp)));
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

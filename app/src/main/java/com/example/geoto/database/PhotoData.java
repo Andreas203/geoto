@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Entity()
 @TypeConverters({Converters.class})
-public class PhotoData {
+public class PhotoData implements Comparable<PhotoData> {
     @PrimaryKey(autoGenerate = true)
     @androidx.annotation.NonNull
     private int id=0;
@@ -23,7 +23,6 @@ public class PhotoData {
     public PhotoData(String absolutePath, Date date) {
         this.absolutePath = absolutePath;
         this.date = date;
-        //this.blob = createBlob(picture);
     }
 
     @androidx.annotation.NonNull
@@ -48,8 +47,15 @@ public class PhotoData {
         this.date = date;
     }
 
-//    private Blob createBlob(Bitmap picture) {
-//
-//        return newBlob;
-//    }
+
+    @Override
+    public int compareTo(PhotoData o) {
+        if (date.compareTo(o.getDate()) > 0) {
+            return 1;
+        } else if (date.compareTo(o.getDate()) <0) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
 }

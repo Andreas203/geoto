@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -188,6 +189,18 @@ public class GalleryFragment extends Fragment {
             Date date = new Date();
 
             PhotoData photo = new PhotoData(path, date);
+
+            if (i==0) {
+                List<Fragment> fragments = getFragmentManager().getFragments();
+                if (fragments != null) {
+                    for (Fragment f : fragments) {
+                        if (f instanceof NewVisitFragment) {
+                            ((NewVisitFragment) f).setMarkerImg(photo);
+                        }
+                    }
+                }
+            }
+
             pageViewModel.insertPhoto(photo);
         }
 

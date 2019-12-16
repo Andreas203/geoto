@@ -101,6 +101,8 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onChanged(@Nullable final List<PhotoData> myPictureList) {
                 mAdapter.setItems(myPictureList);
+                // user clicked OK
+                mAdapter.sortGallery(sort);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.scrollToPosition(myPictureList.size() - 1);
             }});

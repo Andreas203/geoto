@@ -44,6 +44,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -206,13 +207,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             place2 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             if (googleMap != null)
 
-                googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
-                        .title(mLastUpdateTime)
-                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                        // Specifies the anchor to be at a particular point in the marker image.
-                        .anchor(0.5f, 1));
-            //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
 
             if(place1 != null)
                 googleMap.addPolyline(new PolylineOptions()
@@ -270,17 +265,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.new_visit_main, container, false);
-
-
-//        pageViewModel.getPhotoDataToDisplay().observe(this, new Observer<List<PhotoData>>(){
-//            @Override
-//            public void onChanged(@Nullable final List<PhotoData> myPictureList) {
-//                mAdapter = new GalleryAdapter(myPictureList);
-//                mRecyclerView.setAdapter(mAdapter);
-//            }});
-
-
-
 
         barometer = new Barometer(getContext(), this);
         thermometer = new Thermometer(getContext(), this);
@@ -381,6 +365,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
+                                onResume();
                             }
                         });
 
@@ -408,6 +393,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
+        googleMap.setMyLocationEnabled(true);
 
     }
 

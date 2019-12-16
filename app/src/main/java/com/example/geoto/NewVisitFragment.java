@@ -138,6 +138,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
     private Location mCurrentLocation;
     private String mLastUpdateTime;
+
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -229,6 +230,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 startLocationUpdates();
                 barometer.startSensingPressure();
+                thermometer.startSensingTemperature();
                 if (mButtonEnd != null)
                     mButtonEnd.setEnabled(true);
                 mButtonStart.setEnabled(false);

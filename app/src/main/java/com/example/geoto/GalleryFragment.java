@@ -20,13 +20,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.geoto.database.PathData;
 import com.example.geoto.database.PhotoData;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -48,7 +51,6 @@ public class GalleryFragment extends Fragment {
     private PageViewModel pageViewModel;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private List<PhotoData> myPictureList = new ArrayList<>();
 
     private FloatingActionButton fab_sort_images;
     private View frame_layout_for_sort;
@@ -85,11 +87,16 @@ public class GalleryFragment extends Fragment {
         View root = inflater.inflate(R.layout.gallery_main, container, false);
 
         // New stuff
-        RecyclerView mRecyclerView = root.findViewById(R.id.grid_recycler_view);
+        final RecyclerView mRecyclerView = root.findViewById(R.id.grid_recycler_view);
         int numberOfColumns = 4;
         mRecyclerView.setLayoutManager(new GridLayoutManager(container.getContext(), numberOfColumns));
-        mAdapter = new GalleryAdapter(myPictureList);
-        mRecyclerView.setAdapter(mAdapter);
+
+        pageViewModel.getPhotoDataToDisplay().observe(this, new Observer<List<PhotoData>>(){
+            @Override
+            public void onChanged(@Nullable final List<PhotoData> myPictureList) {
+                mAdapter = new GalleryAdapter(myPictureList);
+                mRecyclerView.setAdapter(mAdapter);
+            }});
 
         return root;
     }
@@ -175,17 +182,15 @@ public class GalleryFragment extends Fragment {
      * @param returnedPhotos
      */
     private void onPhotosReturned(List<File> returnedPhotos) {
-        List<PhotoData> returnedDataList = new ArrayList<>();
 
         for (int i = 0; i < returnedPhotos.size(); i++) {
             String path = returnedPhotos.get(i).getAbsolutePath();
             Date date = new Date();
 
             PhotoData photo = new PhotoData(path, date);
-            returnedDataList.add(photo);
+            pageViewModel.insertPhoto(photo);
         }
 
-        myPictureList.addAll(returnedDataList);
         mAdapter.notifyDataSetChanged();
         mRecyclerView.scrollToPosition(returnedPhotos.size() - 1);
     }

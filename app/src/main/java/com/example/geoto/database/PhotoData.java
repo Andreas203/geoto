@@ -23,7 +23,6 @@ public class PhotoData {
     public PhotoData(String absolutePath, Date date) {
         this.absolutePath = absolutePath;
         this.date = date;
-        //this.blob = createBlob(picture);
     }
 
     @androidx.annotation.NonNull
@@ -47,9 +46,4 @@ public class PhotoData {
     public void setDate(Date date) {
         this.date = date;
     }
-
-//    private Blob createBlob(Bitmap picture) {
-//
-//        return newBlob;
-//    }
 }

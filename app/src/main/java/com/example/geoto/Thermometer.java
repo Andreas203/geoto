@@ -12,12 +12,13 @@ public class Thermometer {
     private static final String TAG = Thermometer.class.getSimpleName();
     private long mSamplingRateInMSecs;
     private long mSamplingRateNano;
-    private SensorEventListener mPressureListener = null;
+    private SensorEventListener mTemperatureListener = null;
     private SensorManager mSensorManager;
     private Sensor mThermometerSensor;
     private long timePhoneWasLastRebooted = 0;
-    private long THERMOMETER_READING_FREQUENCY = 10000;
+    private long THERMOMETER_READING_FREQUENCY = 20000;
     private long lastReportTime = 0;
+    private float temperatureValue;
 
     public Thermometer(Context context) {
         // http://androidforums.com/threads/how-to-get-time-of-last-system-boot.548661/
@@ -35,11 +36,11 @@ public class Thermometer {
      * it inits the listener and establishes the actions to take when a reading is available
      */
     private void initThermometerListener() {
-        if (!standardPressureSensorAvailable()) {
+        if (!standardTemperatureSensorAvailable()) {
             Log.d(TAG, "Standard Thermometer unavailable");
         } else {
             Log.d(TAG, "Using Thermometer");
-            mPressureListener = new SensorEventListener() {
+            mTemperatureListener = new SensorEventListener() {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
                     long diff = event.timestamp - lastReportTime;
@@ -48,10 +49,10 @@ public class Thermometer {
                     if (diff >= mSamplingRateNano) {
                         // see next slide
                         long actualTimeInMseconds = timePhoneWasLastRebooted + (long) (event.timestamp / 1000000.0);
-                        float pressureValue = event.values[0];
+                        temperatureValue = event.values[0];
                         int accuracy = event.accuracy;
                         Log.i(TAG, mSecsToString(actualTimeInMseconds) + ": current temperature: " +
-                                pressureValue + "with accuract: " + accuracy);
+                                temperatureValue + "with accuracy: " + accuracy);
                         lastReportTime = event.timestamp;
                     }
                 }
@@ -63,32 +64,36 @@ public class Thermometer {
         }
     }
 
+    public float getTempValue(){
+        return temperatureValue;
+    }
+
     private String mSecsToString(long actualTimeInMseconds) {
         return "NO";
     }
 
-    public boolean standardPressureSensorAvailable() {
+    public boolean standardTemperatureSensorAvailable() {
         return (mThermometerSensor != null);
     }
     /** * it starts the pressure monitoring */
-    public void startSensingPressure() {
+    public void startSensingTemperature() {
         // if the sensor is null,then mSensorManager is null and we get a crash
-        if (standardPressureSensorAvailable()) {
+        if (standardTemperatureSensorAvailable()) {
             Log.d("Standard Thermometer", "starting listener");
             // delay is in microseconds (1millisecond=1000 microseconds)
             // it does not seem to work though
             //stopThermometer();
             // otherwise we stop immediately because
-            mSensorManager.registerListener(mPressureListener, mThermometerSensor,
+            mSensorManager.registerListener(mTemperatureListener, mThermometerSensor,
                     (int) (mSamplingRateInMSecs * 1000));
         } else {
             Log.i(TAG, "Thermometer unavailable or already active");}}
     /** * this stops the Thermometer */
     public void stopThermometer() {
-        if (standardPressureSensorAvailable()) {
+        if (standardTemperatureSensorAvailable()) {
             Log.d("Standard Thermometer", "Stopping listener");
             try {
-                mSensorManager.unregisterListener(mPressureListener);
+                mSensorManager.unregisterListener(mTemperatureListener);
             } catch (Exception e) {
                 // probably already unregistered
             }

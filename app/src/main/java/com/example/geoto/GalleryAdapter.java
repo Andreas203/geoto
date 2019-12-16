@@ -31,6 +31,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
         context = cont;
     }
 
+
+
     @Override
     public View_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //Inflate the layout, initialize the View Holder

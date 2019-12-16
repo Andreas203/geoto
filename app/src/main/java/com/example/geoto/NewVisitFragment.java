@@ -126,13 +126,13 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         super.onResume();
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
+        mLocationRequest.setInterval(20000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         startLocationUpdates();
         barometer.startSensingPressure();
-        thermometer.startSensingPressure();
+        thermometer.startSensingTemperature();
     }
 
 

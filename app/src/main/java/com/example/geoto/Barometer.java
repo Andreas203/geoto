@@ -16,7 +16,7 @@ public class Barometer {
     private SensorManager mSensorManager;
     private Sensor mBarometerSensor;
     private long timePhoneWasLastRebooted = 0;
-    private long BAROMETER_READING_FREQUENCY = 30000;
+    private long BAROMETER_READING_FREQUENCY = 20000;
     private long lastReportTime = 0;
 
     public Barometer(Context context) {

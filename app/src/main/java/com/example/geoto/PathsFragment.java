@@ -77,6 +77,8 @@ public class PathsFragment extends Fragment {
                 mRecyclerView.setAdapter(mAdapter);
             }});
 
+
+
         return root;
     }
 }

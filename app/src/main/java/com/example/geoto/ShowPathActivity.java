@@ -77,11 +77,13 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
         if(b != null) {
             position = b.getInt("position");
             if (position!=-1){
-                TextView descriptionView = (TextView) findViewById(R.id.path_description);
-
                 PathData path = PathsAdapter.getPathItems().get(position);
                 Date startDate = path.getStartDate();
                 Date endDate = path.getEndDate();
+
+                TextView descriptionView = (TextView) findViewById(R.id.path_description);
+                descriptionView.setText(path.getDescription());
+
                 List<LocationData> allLocationData = PathsAdapter.getLocationItems();
                 List<LocationData> pathLocationData = new ArrayList<>();
 

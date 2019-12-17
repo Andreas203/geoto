@@ -288,7 +288,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "New visit started!", Toast.LENGTH_SHORT).show();
+
                 startDate = new Date();
                 startLocationUpdates();
                 googleMap.setMyLocationEnabled(true);
@@ -341,7 +341,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                                 PathData pathData = new PathData(pathTitle, startDate, endDate, pathDescr);
                                 pageViewModel.insertPath(pathData);
 
-                                Toast.makeText(getContext(), "Visit stopped!", Toast.LENGTH_SHORT).show();
+//
                                 stopLocationUpdates();
                                 // Removes all markers, overlays, and polylines from the map.
                                 googleMap.clear();

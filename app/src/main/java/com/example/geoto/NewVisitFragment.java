@@ -331,8 +331,8 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 // GET A TITLE AND DESCRIPTION OF THE PATH FROM THE USER ////////////////////////////
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-                alertDialog.setTitle("Path Information");
-                alertDialog.setMessage("Enter Path Information");
+                alertDialog.setTitle("Path details");
+//                alertDialog.setMessage("Enter Path Information");
 
                 LinearLayout layout = new LinearLayout(getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);

@@ -23,7 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
+            android:textAllCaps="false"
             app:tabInlineLabel="true"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
             app:tabIndicatorHeight="3sp" />
 
     </com.google.android.material.appbar.AppBarLayout>

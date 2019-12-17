@@ -79,7 +79,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
-    private Polyline line;
 
     private ExtendedFloatingActionButton mButtonStart;
     private ExtendedFloatingActionButton mButtonEnd;
@@ -337,6 +336,8 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                             public void onClick(DialogInterface dialog, int which) {
                                 String pathTitle = titleBox.getText().toString();
                                 String pathDescr = descriptionBox.getText().toString();
+                                endDate = new Date();
+
                                 PathData pathData = new PathData(pathTitle, startDate, endDate, pathDescr);
                                 pageViewModel.insertPath(pathData);
 
@@ -348,7 +349,8 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
                                 barometer.stopBarometer();
                                 thermometer.stopThermometer();
-                                endDate = new Date();
+
+
                                 if (mButtonStart != null)
                                     mButtonStart.setEnabled(true);
                                 mButtonEnd.setEnabled(false);

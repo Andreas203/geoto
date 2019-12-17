@@ -9,28 +9,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.geoto.database.LocationData;
 import com.example.geoto.database.PathData;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>{
+public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder> {
     static private Context context;
-    private static List<PathData> items;
+    private static List<PathData> pathItems;
+    private static List<LocationData> locItems;
     private PageViewModel pageViewModel;
 
     public PathsAdapter(List<PathData> items) {
-        this.items = items;
+        this.pathItems = items;
     }
 
-    public PathsAdapter(Context cont, List<PathData> items) {
+    public PathsAdapter() {
         super();
-        this.items = items;
-        context = cont;
+        pathItems = new ArrayList<>();
     }
 
     @Override
@@ -45,7 +49,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
 
     @Override
     public void onBindViewHolder(final View_Holder holder, final int position) {
-        Date date = items.get(position).startDate;
+        Date date = pathItems.get(position).startDate;
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         String newDate = df.format(date);
@@ -53,63 +57,56 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
 
         //Use the provided View Holder on the onCreateViewHolder method to populate the
         // current row on the RecyclerView
-        if (holder!=null && items.get(position)!=null) {
-            holder.title.setText(items.get(position).title);
-            //holder.description.setText(items.get(position).description);
+        if (holder!=null && pathItems.get(position)!=null) {
+            holder.title.setText(pathItems.get(position).title);
             holder.date.setText(newDate);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    //Date sdate = items.get(position).startDate;
-                    //Date edate = items.get(position).endDate;
-
-
-                    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-
-                    //String startDate = df.format(sdate);
-                    //String endDate = df.format(edate);
-
                     Intent intent = new Intent(context, ShowPathActivity.class);
                     intent.putExtra("position", position);
-
                     context.startActivity(intent);
                 }
             });
         }
-        //animate(holder);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return pathItems.size();
     }
 
 
     public class View_Holder extends RecyclerView.ViewHolder {
         TextView title;
-        TextView description;
         TextView date;
 
         View_Holder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.path_title);
-            description = (TextView) itemView.findViewById(R.id.path_description);
             date = (TextView) itemView.findViewById(R.id.start_date);
         }
     }
 
     // convenience method for getting data at click position
     PathData getPath(int id) {
-        return items.get(id);
+        return pathItems.get(id);
     }
 
-    public static List<PathData> getItems() {
-        return items;
+    public static List<PathData> getPathItems() {
+        return pathItems;
     }
 
-    public static void setItems(List<PathData> items) {
-        PathsAdapter.items = items;
+    public static List<LocationData> getLocationItems() {
+        return locItems;
+    }
+
+    public static void setPathItems(List<PathData> items) {
+        PathsAdapter.pathItems = items;
+    }
+
+    public static void setLocationItems(List<LocationData> items) {
+        PathsAdapter.locItems = items;
     }
 }

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.geoto.PageViewModel;
 import com.example.geoto.PathsAdapter;
 import com.example.geoto.R;
+import com.example.geoto.database.LocationData;
 import com.example.geoto.database.PathData;
 
 import java.util.Date;
@@ -31,7 +32,7 @@ public class PathsFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private PageViewModel pageViewModel;
-    private RecyclerView.Adapter mAdapter;
+    private PathsAdapter mAdapter;
 
     public static PathsFragment newInstance(int index) {
         PathsFragment fragment = new PathsFragment();
@@ -69,12 +70,21 @@ public class PathsFragment extends Fragment {
         View root = inflater.inflate(R.layout.paths_main, container, false);
         final RecyclerView mRecyclerView = root.findViewById(R.id.paths_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        mAdapter = new PathsAdapter();
+        mRecyclerView.setAdapter(mAdapter);
 
         pageViewModel.getPathDataToDisplay().observe(this, new Observer<List<PathData>>(){
             @Override
             public void onChanged(@Nullable final List<PathData> pathList) {
-                mAdapter = new PathsAdapter(pathList);
-                mRecyclerView.setAdapter(mAdapter);
+                mAdapter.setPathItems(pathList);
+                mAdapter.notifyDataSetChanged();
+            }});
+
+        pageViewModel.getLocationDataToDisplay().observe(this, new Observer<List<LocationData>>(){
+            @Override
+            public void onChanged(@Nullable final List<LocationData> pathList) {
+                mAdapter.setLocationItems(pathList);
+                mAdapter.notifyDataSetChanged();
             }});
 
         return root;

@@ -38,8 +38,8 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     imageView.setImageBitmap(myBitmap);
                 }
 
-                mapView = (MapView) findViewById(R.id.image_map);
-                mapView.onCreate(savedInstanceState);
+                //mapView = (MapView) findViewById(R.id.image_map);
+                //mapView.onCreate(savedInstanceState);
                 mapView.onResume();
                 mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
             }

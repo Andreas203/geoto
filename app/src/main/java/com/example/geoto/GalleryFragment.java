@@ -53,7 +53,7 @@ public class GalleryFragment extends Fragment {
 
     private PageViewModel pageViewModel;
     private RecyclerView mRecyclerView;
-    private GalleryAdapter mAdapter; = new GalleryAdapter();
+    private GalleryAdapter mAdapter;
 
     private FloatingActionButton fab_sort_images;
     private View frame_layout_for_sort;
@@ -96,6 +96,7 @@ public class GalleryFragment extends Fragment {
         final RecyclerView mRecyclerView = root.findViewById(R.id.grid_recycler_view);
         int numberOfColumns = 4;
         mRecyclerView.setLayoutManager(new GridLayoutManager(container.getContext(), numberOfColumns));
+        mAdapter = new GalleryAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
         pageViewModel.getPhotoDataToDisplay().observe(this, new Observer<List<PhotoData>>(){

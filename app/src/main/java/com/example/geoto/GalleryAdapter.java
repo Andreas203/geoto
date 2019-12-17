@@ -15,7 +15,11 @@ import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.geoto.database.LocationData;
+import com.example.geoto.database.PathData;
 import com.example.geoto.database.PhotoData;
+import com.example.geoto.database.PressureData;
+import com.example.geoto.database.TempData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,15 +27,23 @@ import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Holder> {
     static private Context context;
-    private static List<PhotoData> items;
+    private static List<PhotoData> photoItems;
+    private static List<PathData> pathItems;
+    private static List<LocationData> locationItems;
+    private static List<PressureData> pressureItems;
+    private static List<TempData> tempItems;
 
     public GalleryAdapter(List<PhotoData> items) {
-        this.items = items;
+        this.photoItems = items;
     }
 
     public GalleryAdapter() {
         super();
-        items = new ArrayList<>();
+        photoItems = new ArrayList<>();
+        pathItems = new ArrayList<>();
+        locationItems = new ArrayList<>();
+        pressureItems = new ArrayList<>();
+        tempItems = new ArrayList<>();
     }
 
     @Override
@@ -49,9 +61,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
 
         //Use the provided View Holder on the onCreateViewHolder method to populate the
         // current row on the RecyclerView
-        if (holder!=null && items.get(position)!=null) {
-            if (items.get(position).getAbsolutePath()!=null) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(items.get(position).getAbsolutePath());
+        if (holder!=null && photoItems.get(position)!=null) {
+            if (photoItems.get(position).getAbsolutePath()!=null) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(photoItems.get(position).getAbsolutePath());
                 holder.imageView.setImageBitmap(myBitmap);
             }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -69,12 +81,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
 
     // convenience method for getting data at click position
     PhotoData getItem(int id) {
-        return items.get(id);
+        return photoItems.get(id);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return photoItems.size();
     }
 
     public class View_Holder extends RecyclerView.ViewHolder  {
@@ -86,26 +98,56 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
             imageView = (ImageView) itemView.findViewById(R.id.image_item);
 
         }
-
-
     }
 
     public void sortGallery(int sortCode) {
-        if ((items.size()) > 0) {
+        if ((photoItems.size()) > 0) {
             if (sortCode == 0) {
-                Collections.sort(items);
+                Collections.sort(photoItems);
             }
             if (sortCode == 1) {
-                Collections.sort(items, Collections.reverseOrder());
+                Collections.sort(photoItems, Collections.reverseOrder());
             }
         }
     }
 
-    public static List<PhotoData> getItems() {
-        return items;
+    public static List<PhotoData> getPhotoItems() {
+        return photoItems;
     }
 
-    public static void setItems(List<PhotoData> items) {
-        GalleryAdapter.items = items;
+    public static void setPhotoItems(List<PhotoData> photoItems) {
+        GalleryAdapter.photoItems = photoItems;
+    }
+
+    public static List<PathData> getPathItems() {
+        return pathItems;
+    }
+
+    public static void setPathItems(List<PathData> pathItems) {
+        GalleryAdapter.pathItems = pathItems;
+    }
+
+    public static List<LocationData> getLocationItems() {
+        return locationItems;
+    }
+
+    public static void setLocationItems(List<LocationData> locationItems) {
+        GalleryAdapter.locationItems = locationItems;
+    }
+
+    public static List<PressureData> getPressureItems() {
+        return pressureItems;
+    }
+
+    public static void setPressureItems(List<PressureData> pressureItems) {
+        GalleryAdapter.pressureItems = pressureItems;
+    }
+
+    public static List<TempData> getTempItems() {
+        return tempItems;
+    }
+
+    public static void setTempItems(List<TempData> tempItems) {
+        GalleryAdapter.tempItems = tempItems;
     }
 }

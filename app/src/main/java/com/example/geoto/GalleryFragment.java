@@ -16,8 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,22 +23,22 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.geoto.database.LocationData;
 import com.example.geoto.database.PathData;
 import com.example.geoto.database.PhotoData;
+import com.example.geoto.database.PressureData;
+import com.example.geoto.database.TempData;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -103,11 +101,42 @@ public class GalleryFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onChanged(@Nullable final List<PhotoData> myPictureList) {
-                mAdapter.setItems(myPictureList);
-                // user clicked OK
+                mAdapter.setPhotoItems(myPictureList);
                 mAdapter.sortGallery(sort);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.scrollToPosition(myPictureList.size() - 1);
+            }});
+
+        pageViewModel.getPathDataToDisplay().observe(this, new Observer<List<PathData>>(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onChanged(@Nullable final List<PathData> myPathList) {
+                mAdapter.setPathItems(myPathList);
+                mAdapter.notifyDataSetChanged();
+            }});
+
+        pageViewModel.getLocationDataToDisplay().observe(this, new Observer<List<LocationData>>(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onChanged(@Nullable final List<LocationData> myLocationList) {
+                mAdapter.setLocationItems(myLocationList);
+                mAdapter.notifyDataSetChanged();
+            }});
+
+        pageViewModel.getPressureDataToDisplay().observe(this, new Observer<List<PressureData>>(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onChanged(@Nullable final List<PressureData> myPressureList) {
+                mAdapter.setPressureItems(myPressureList);
+                mAdapter.notifyDataSetChanged();
+            }});
+
+        pageViewModel.getTempDataToDisplay().observe(this, new Observer<List<TempData>>(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onChanged(@Nullable final List<TempData> myTempList) {
+                mAdapter.setTempItems(myTempList);
+                mAdapter.notifyDataSetChanged();
             }});
 
         return root;

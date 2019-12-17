@@ -162,10 +162,8 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
-
             return;
         }
-
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
     }
 
@@ -187,7 +185,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
     }
-
 
     private Location mCurrentLocation;
     private String mLastUpdateTime;

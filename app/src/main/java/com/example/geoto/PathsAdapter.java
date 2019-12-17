@@ -2,6 +2,7 @@ package com.example.geoto;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import java.util.List;
 public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>{
     static private Context context;
     private static List<PathData> items;
+    private PageViewModel pageViewModel;
 
     public PathsAdapter(List<PathData> items) {
         this.items = items;
@@ -44,8 +46,11 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
     @Override
     public void onBindViewHolder(final View_Holder holder, final int position) {
         Date date = items.get(position).startDate;
+
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         String newDate = df.format(date);
+
+
         //Use the provided View Holder on the onCreateViewHolder method to populate the
         // current row on the RecyclerView
         if (holder!=null && items.get(position)!=null) {
@@ -56,8 +61,19 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    //Date sdate = items.get(position).startDate;
+                    //Date edate = items.get(position).endDate;
+
+
+                    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+                    //String startDate = df.format(sdate);
+                    //String endDate = df.format(edate);
+
                     Intent intent = new Intent(context, ShowPathActivity.class);
                     intent.putExtra("position", position);
+
                     context.startActivity(intent);
                 }
             });

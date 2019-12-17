@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -22,6 +23,10 @@ public interface LocationDAO {
     // it selects a random element
     @Query("SELECT * FROM locationData")
     LiveData<List<LocationData>> getAllLocations();
+
+    // it selects element for specific path date
+    @Query("SELECT * FROM locationData WHERE date >= :startDate AND date <= :endDate")
+    LiveData<List<LocationData>> getPathLocations(Date startDate, Date endDate);
 
     @Delete
     void deleteAll(LocationData... locationData);

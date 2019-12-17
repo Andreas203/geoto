@@ -12,8 +12,14 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.geoto.database.PhotoData;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
 
-public class ShowImageActivity extends AppCompatActivity {
+public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private MapView mapView;
+    private GoogleMap googleMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,11 @@ public class ShowImageActivity extends AppCompatActivity {
                     Bitmap myBitmap = BitmapFactory.decodeFile(element.getAbsolutePath());
                     imageView.setImageBitmap(myBitmap);
                 }
+
+                mapView = (MapView) findViewById(R.id.image_map);
+                mapView.onCreate(savedInstanceState);
+                mapView.onResume();
+                mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
             }
 
         }
@@ -38,4 +49,8 @@ public class ShowImageActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onMapReady(GoogleMap map) {
+        googleMap = map;
+    }
 }

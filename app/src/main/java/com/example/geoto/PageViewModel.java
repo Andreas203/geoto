@@ -14,16 +14,20 @@ import com.example.geoto.database.PhotoData;
 import com.example.geoto.database.PressureData;
 import com.example.geoto.database.TempData;
 
+import java.util.Date;
 import java.util.List;
 
 public class PageViewModel extends AndroidViewModel {
     private final Repository repository;
+    private Date startDate;
+    private  Date endDate;
 
     private MutableLiveData<Integer> mIndex = new MutableLiveData<>();
 
     LiveData<List<PhotoData>> photoDataToDisplay;
     LiveData<List<PathData>> pathDataToDisplay;
     LiveData<List<LocationData>> locationDataToDisplay;
+    LiveData<List<LocationData>> pathLocationToDisplay;
     LiveData<List<PressureData>> pressureDataToDisplay;
     LiveData<List<TempData>> tempDataToDisplay;
 
@@ -36,6 +40,9 @@ public class PageViewModel extends AndroidViewModel {
         locationDataToDisplay = repository.getAllLocations();
         pressureDataToDisplay = repository.getAllPressures();
         tempDataToDisplay = repository.getAllTemps();
+
+
+        pathLocationToDisplay = repository.getPathLocations(startDate,endDate);
     }
 
     public void insertPhoto(PhotoData photo) {
@@ -73,6 +80,13 @@ public class PageViewModel extends AndroidViewModel {
             locationDataToDisplay = new MutableLiveData<List<LocationData>>();
         }
         return locationDataToDisplay;
+    }
+
+    public LiveData<List<LocationData>> getPathLocationToDisplay(Date startDate, Date endDate) {
+        if (pathLocationToDisplay == null) {
+            pathLocationToDisplay = new MutableLiveData<List<LocationData>>();
+        }
+        return pathLocationToDisplay;
     }
 
     public LiveData<List<PressureData>> getPressureDataToDisplay() {

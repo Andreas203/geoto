@@ -4,6 +4,7 @@
 
 package com.example.geoto;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -29,6 +30,9 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
     private MapView mapView;
     private GoogleMap googleMap;
     private Polyline line;
+
+    private LatLng place1 = null;
+    private LatLng place2 = null;
 
     private PageViewModel pageViewModel;
 
@@ -64,10 +68,10 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                         LocationData locationData = locList.get(i);
                         double lat = locationData.getLatitude();
                         double lon = locationData.getLongitude();
-                        place2 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                        place2 = new LatLng(lat, lon);
                         if (googleMap != null)
 
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
+                            //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new place2.getLatitude(), place2.getLongitude()), 14.0f);
 
                         if(place1 != null)
                             googleMap.addPolyline(new PolylineOptions()
@@ -76,7 +80,7 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                                             place1,
                                             place2)
                             );
-                        place1 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                        place1 = place2;
                     }
                 }});
 

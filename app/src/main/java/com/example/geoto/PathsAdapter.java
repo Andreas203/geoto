@@ -57,7 +57,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
             // current row on the RecyclerView
             if (holder!=null && items.get(position)!=null) {
                 holder.title.setText(items.get(position).title);
-                holder.description.setText(items.get(position).description);
+                //holder.description.setText(items.get(position).description);
                 holder.date.setText(newDate);
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +97,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
             View_Holder(View itemView) {
                 super(itemView);
                 title = (TextView) itemView.findViewById(R.id.path_title);
-                description = (TextView) itemView.findViewById(R.id.path_description);
+                //description = (TextView) itemView.findViewById(R.id.path_description);
                 date = (TextView) itemView.findViewById(R.id.start_date);
             }
         }

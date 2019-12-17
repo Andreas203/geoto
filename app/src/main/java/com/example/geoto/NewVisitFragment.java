@@ -3,6 +3,7 @@ package com.example.geoto;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -39,6 +41,7 @@ import com.example.geoto.database.PathData;
 import com.example.geoto.database.PhotoData;
 import com.example.geoto.database.PressureData;
 import com.example.geoto.database.TempData;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -53,6 +56,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -69,14 +75,14 @@ import pl.aprilapps.easyphotopicker.EasyImage;
  */
 public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
-
+    private PendingIntent mLocationPendingIntent;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final int ACCESS_FINE_LOCATION = 123;
 
     private PageViewModel pageViewModel;
     private MapView mapView;
-    private GoogleMap googleMap;
+    private static GoogleMap googleMap;
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
 
@@ -92,6 +98,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     private LatLng place2 = null;
     private Date startDate;
     private Date endDate;
+    private static FragmentActivity activity;
 
 
     public static NewVisitFragment newInstance(int index) {
@@ -100,6 +107,19 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+
+    public static FragmentActivity getFragActivity() {
+        return activity;
+    }
+
+    public static void setActivity(FragmentActivity activity) {
+        NewVisitFragment.activity = activity;
+    }
+
+    public static GoogleMap getMap() {
+        return googleMap;
     }
 
     public void storePressure(float pressure, Date date) {
@@ -137,36 +157,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         }
         pageViewModel.setIndex(index);
     }
-
-
-
-    private void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        ACCESS_FINE_LOCATION);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-            return;
-        }
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
-    }
-
 
     /**
      * it stops the location updates
@@ -216,6 +206,37 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         }
     };
 
+    private void startLocationUpdates() {
+        Intent intent = new Intent(getContext(), LocationService.class);
+        mLocationPendingIntent = PendingIntent.getService(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Task<Void> locationTask = mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                    mLocationPendingIntent);
+            if (locationTask != null) {
+                System.out.println("HERE IT IS PLEASE BE");
+                locationTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (e instanceof ApiException) {
+                            Log.w("MapsActivity", ((ApiException) e).getStatusMessage());
+                        } else {
+                            Log.w("MapsActivity", e.getMessage());
+                        }
+                    }
+                });
+
+                locationTask.addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        System.out.println("HERE IT IS PLEASE BE");
+                        Log.d("MapsActivity", "restarting gps successful!");
+                    }
+                });
+            }
+        }
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
+    }
 
     @SuppressLint("MissingPermission")
     @Override
@@ -285,7 +306,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "New visit started!", Toast.LENGTH_SHORT).show();
+
                 startDate = new Date();
                 startLocationUpdates();
                 googleMap.setMyLocationEnabled(true);
@@ -338,7 +359,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                                 PathData pathData = new PathData(pathTitle, startDate, endDate, pathDescr);
                                 pageViewModel.insertPath(pathData);
 
-                                Toast.makeText(getContext(), "Visit stopped!", Toast.LENGTH_SHORT).show();
+//
                                 stopLocationUpdates();
                                 // Removes all markers, overlays, and polylines from the map.
                                 googleMap.clear();

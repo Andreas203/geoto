@@ -16,21 +16,17 @@
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="80dp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="171dp" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_end"
-            android:layout_width="match_parent"
+            android:layout_width="150sp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/fab_margin"
-            android:backgroundTint="#E57373"
-            android:padding="10dp"
+            android:backgroundTint="#99E64447"
+            android:padding="13dp"
             android:paddingStart="0dp"
             android:paddingLeft="0dp"
             android:paddingTop="0dp"
@@ -39,6 +35,7 @@
             android:paddingBottom="0dp"
             android:text="@string/extended_fab_label2"
             android:textAlignment="center"
+            android:textColor="#FFFFFFFF"
             android:theme="@style/Theme.MaterialComponents" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -48,7 +45,7 @@
             android:layout_gravity="top|right"
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_add_a_photo_white_24dp"
-            app:backgroundTint="@color/colorAccent"
+            app:backgroundTint="#64B5F6"
             app:fabSize="normal" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -58,17 +55,18 @@
             android:layout_gravity="top|left"
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_gallery_white_24dp"
-            app:backgroundTint="@color/colorAccent"
+            app:backgroundTint="#FF8A65"
             app:fabSize="normal" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_start"
-            android:layout_width="match_parent"
+            android:layout_width="150sp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/fab_margin"
-            android:backgroundTint="#81C784"
-            android:padding="10dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#9981C784"
+            android:padding="13dp"
             android:paddingStart="0dp"
             android:paddingLeft="0dp"
             android:paddingTop="0dp"

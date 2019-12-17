@@ -12,22 +12,24 @@
 
     <TextView
         android:id="@+id/path_description"
-        android:layout_width="385dp"
-        android:layout_height="57dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:background="#6200EA"
         android:gravity="bottom"
         android:textColor="#FFFFFF"
-        android:textSize="24sp" />
+        android:textSize="36sp" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/path_map"
         android:layout_width="match_parent"
         android:layout_height="578dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="70dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="80dp"
-        android:gravity="top"
+        android:gravity="bottom"
+        android:visibility="visible"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="171dp" />
 

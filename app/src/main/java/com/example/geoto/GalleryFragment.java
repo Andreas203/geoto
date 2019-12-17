@@ -277,7 +277,6 @@ public class GalleryFragment extends Fragment {
             builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
                     sort = which;
                 }
             });
@@ -286,7 +285,6 @@ public class GalleryFragment extends Fragment {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
                     // user clicked OK
                     mAdapter.sortGallery(sort);
                     mAdapter.notifyDataSetChanged();

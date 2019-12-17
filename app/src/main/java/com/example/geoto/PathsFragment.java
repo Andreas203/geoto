@@ -36,6 +36,7 @@ public class PathsFragment extends Fragment {
 
     private PageViewModel pageViewModel;
     private PathsAdapter mAdapter;
+    private int sort = 0;
 
     public static PathsFragment newInstance(int index) {
         PathsFragment fragment = new PathsFragment();
@@ -80,6 +81,7 @@ public class PathsFragment extends Fragment {
             @Override
             public void onChanged(@Nullable final List<PathData> pathList) {
                 mAdapter.setPathItems(pathList);
+                mAdapter.sortPaths(sort);
                 mAdapter.notifyDataSetChanged();
             }});
 

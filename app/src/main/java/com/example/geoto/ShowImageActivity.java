@@ -73,71 +73,54 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                 TextView titleView = (TextView) findViewById(R.id.path_title);
                 titleView.setText(pathData.getTitle());
 
-
-                PressureData pressureData = null;
+                PressureData pressureData;
                 List<PressureData> allPressureData = GalleryAdapter.getPressureItems();
-                if (allPressureData.size() > 1) {
-                    for (int i = 0; i < allPressureData.size()-1; i++) {
-                        Date pressureDate1 = allPressureData.get(i).getDate();
-                        Date pressureDate2 = allPressureData.get(i+1).getDate();
-
-                        if (photoData.getDate().after(pressureDate1) && photoData.getDate().before(pressureDate2)) {
-                            pressureData = allPressureData.get(i);
-                        }
-                    }
-                    if (pressureData==null) {
-                        pressureData = allPressureData.get(allPressureData.size()-1);
-                    }
-                } else if (allPressureData.size() == 1) {
+                if (allPressureData.size() > 0) {
                     pressureData = allPressureData.get(0);
                 } else {
                     pressureData = new PressureData(0, new Date());
                 }
+                for (int j = 0; j < allPressureData.size(); j++) {
+                    Date pressureDate = allPressureData.get(j).getDate();
+
+                    if (pressureDate.before(photoData.getDate())) {
+                        pressureData = allPressureData.get(j);
+                    }
+                }
                 TextView pressureView = (TextView) findViewById(R.id.photo_pressure);
                 pressureView.setText(Float.toString(pressureData.getPressure()));
 
-
-                TempData tempData = null;
+                TempData tempData;
                 List<TempData> allTempData = GalleryAdapter.getTempItems();
-                if (allTempData.size() > 1) {
-                    for (int i = 0; i < allTempData.size()-1; i++) {
-                        Date tempDate1 = allTempData.get(i).getDate();
-                        Date tempDate2 = allTempData.get(i+1).getDate();
-
-                        if (photoData.getDate().after(tempDate1) && photoData.getDate().before(tempDate2)) {
-                            tempData = allTempData.get(i);
-                        }
-                    }
-                    if (tempData==null) {
-                        tempData = allTempData.get(allTempData.size()-1);
-                    }
-                } else if (allTempData.size() == 1) {
+                if (allTempData.size() > 0) {
                     tempData = allTempData.get(0);
                 } else {
                     tempData = new TempData(0, new Date());
+                }
+                for (int j = 0; j < allTempData.size(); j++) {
+                    Date tempDate = allTempData.get(j).getDate();
+
+                    if (tempDate.before(photoData.getDate())) {
+                        tempData = allTempData.get(j);
+                    }
                 }
                 TextView tempView = (TextView) findViewById(R.id.photo_temp);
                 tempView.setText(Float.toString(tempData.getTemp()));
 
 
-                LocationData locationData = null;
+                LocationData locationData;
                 List<LocationData> allLocationData = GalleryAdapter.getLocationItems();
-                if (allLocationData.size() > 1) {
-                    for (int i = 0; i < allLocationData.size()-1; i++) {
-                        Date locationDate1 = allLocationData.get(i).getDate();
-                        Date locationDate2 = allLocationData.get(i+1).getDate();
-
-                        if (photoData.getDate().after(locationDate1) && photoData.getDate().before(locationDate2)) {
-                            locationData = allLocationData.get(i);
-                        }
-                    }
-                    if (locationData==null) {
-                        locationData = allLocationData.get(allLocationData.size()-1);
-                    }
-                } else if (allLocationData.size() == 1) {
+                if (allLocationData.size() > 0) {
                     locationData = allLocationData.get(0);
                 } else {
                     locationData = new LocationData(0, 0, 0, new Date());
+                }
+                for (int j = 0; j < allLocationData.size(); j++) {
+                    Date locationDate = allLocationData.get(j).getDate();
+
+                    if (locationDate.before(photoData.getDate())) {
+                        locationData = allLocationData.get(j);
+                    }
                 }
                 double lat = locationData.getLatitude();
                 double lon = locationData.getLongitude();

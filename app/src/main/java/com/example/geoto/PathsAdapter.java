@@ -20,6 +20,7 @@ import com.example.geoto.database.PhotoData;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -116,5 +117,16 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
     }
     public static void setPhotoItems(List<PhotoData> items) {
         PathsAdapter.photoItems = items;
+    }
+
+    public void sortPaths(int sortCode) {
+        if ((pathItems.size()) > 0) {
+            if (sortCode == 0) {
+                Collections.sort(pathItems);
+            }
+            if (sortCode == 1) {
+                Collections.sort(pathItems, Collections.reverseOrder());
+            }
+        }
     }
 }

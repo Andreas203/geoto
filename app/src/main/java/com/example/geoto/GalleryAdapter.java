@@ -92,7 +92,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
     public class View_Holder extends RecyclerView.ViewHolder  {
         ImageView imageView;
 
-
         View_Holder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.image_item);

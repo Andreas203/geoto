@@ -81,12 +81,21 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
 
                 List<LocationData> allLocationData = PathsAdapter.getLocationItems();
                 List<LocationData> pathLocationData = new ArrayList<>();
-
                 for (int i = 0; i < allLocationData.size(); i++) {
                     LocationData location = allLocationData.get(i);
 
                     if (location.getDate().after(startDate) && location.getDate().before(endDate)) {
                         pathLocationData.add(location);
+                    }
+                }
+
+                List<PhotoData> allPhotoData = PathsAdapter.getPhotoItems();
+                List<PhotoData> pathPhotoData = new ArrayList<>();
+                for (int i = 0; i < allPhotoData.size(); i++) {
+                    PhotoData photo = allPhotoData.get(i);
+
+                    if (photo.getDate().after(startDate) && photo.getDate().before(endDate)) {
+                        pathPhotoData.add(photo);
                     }
                 }
 
@@ -112,20 +121,39 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                         googleMap.animateCamera(update);
 
                         if (place1 != null) {
-                            System.out.println("THIS IS A PLOT AND PAY ATTENTION YOU WANKER");
-                            System.out.println(place1);
-                            System.out.println(place2);
                             googleMap.addPolyline(new PolylineOptions()
                                     .clickable(true)
                                     .add(
                                             place1,
                                             place2)
-
                             );
                         }
                         place1 = place2;
                     }
                 }
+
+                for (int i = 0; i < pathPhotoData.size(); i++) {
+                    PhotoData photoData = pathPhotoData.get(i);
+
+                    LocationData locationData;
+                    if (pathLocationData.size() > 0) {
+                        locationData = pathLocationData.get(0);
+                    } else {
+                        locationData  = new LocationData(0, 0, 0, new Date());
+                    }
+                    for (int j = 0; j < pathLocationData.size(); j++) {
+                        Date locationDate = pathLocationData.get(j).getDate();
+
+                        if (locationDate.before(photoData.getDate())) {
+                            locationData = pathLocationData.get(j);
+                        }
+                    }
+                    double lat = locationData.getLatitude();
+                    double lon = locationData.getLongitude();
+                    LatLng place = new LatLng(lat, lon);
+                    googleMap.addMarker(new MarkerOptions().position(place));
+                }
+
             }
         }
 

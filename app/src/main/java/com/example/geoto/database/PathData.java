@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity()
 @TypeConverters({Converters.class})
-public class PathData {
+public class PathData implements Comparable<PathData> {
     @PrimaryKey(autoGenerate = true)
     @androidx.annotation.NonNull
     public int pathId=0;
@@ -60,5 +60,16 @@ public class PathData {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int compareTo(PathData o) {
+        if (startDate.compareTo(o.getStartDate()) > 0) {
+            return 1;
+        } else if (startDate.compareTo(o.getStartDate()) <0) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

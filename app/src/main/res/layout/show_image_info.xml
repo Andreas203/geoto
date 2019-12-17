@@ -29,6 +29,51 @@
         android:padding="20dp"
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="#383838"
+        android:orientation="vertical"
+        android:padding="7dp">
+
+        <TextView
+            android:id="@+id/path_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="bottom|left"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"/>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="#383838"
+            android:orientation="horizontal"
+            android:padding="7dp">
+
+            <TextView
+                android:id="@+id/photo_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="bottom|left"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:id="@+id/photo_pressure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="top|right"
+                android:textColor="#EF5350"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
     <com.google.android.gms.maps.MapView
         android:id="@+id/image_map"
         android:layout_width="381dp"

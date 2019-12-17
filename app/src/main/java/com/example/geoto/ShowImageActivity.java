@@ -24,7 +24,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message2);
+        setContentView(R.layout.show_image_info);
 
         Bundle b = getIntent().getExtras();
         int position=-1;

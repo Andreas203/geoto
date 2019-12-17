@@ -53,7 +53,7 @@ public class GalleryFragment extends Fragment {
 
     private PageViewModel pageViewModel;
     private RecyclerView mRecyclerView;
-    private GalleryAdapter mAdapter = new GalleryAdapter();
+    private GalleryAdapter mAdapter; = new GalleryAdapter();
 
     private FloatingActionButton fab_sort_images;
     private View frame_layout_for_sort;
@@ -67,6 +67,7 @@ public class GalleryFragment extends Fragment {
 
     public static GalleryFragment newInstance(int index) {
         GalleryFragment fragment = new GalleryFragment();
+
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);

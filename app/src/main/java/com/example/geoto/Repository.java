@@ -18,6 +18,7 @@ import com.example.geoto.database.PressureData;
 import com.example.geoto.database.TempDAO;
 import com.example.geoto.database.TempData;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -47,6 +48,7 @@ class Repository extends ViewModel {
     public LiveData<List<PathData>> getAllPaths() {
         return pathDao.getAllPaths();
     }
+    public LiveData<List<LocationData>> getPathLocations(Date startDate,Date endDate) {return locationDao.getPathLocations(startDate,endDate);}
     public LiveData<List<LocationData>> getAllLocations() {
         return locationDao.getAllLocations();
     }
@@ -56,6 +58,7 @@ class Repository extends ViewModel {
     public LiveData<List<TempData>> getAllTemps() {
         return tempDao.getAllTemps();
     }
+
 
     public void insertPhoto(PhotoData photo) { new insertPhotoAsyncTask(photoDao).execute(photo);    }
     public void insertPath(PathData path) { new insertPathAsyncTask(pathDao).execute(path);    }

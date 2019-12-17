@@ -10,38 +10,53 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.geoto.database.PhotoData;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.Polyline;
 
-public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCallback {
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap googleMap;
+    private LocationRequest mLocationRequest;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Polyline line;
+
+    private PageViewModel pageViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message2);
+        setContentView(R.layout.saved_path);
+
+        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
 
         Bundle b = getIntent().getExtras();
         int position=-1;
         if(b != null) {
             position = b.getInt("position");
-            if (position!=-1){
-                ImageView imageView = (ImageView) findViewById(R.id.image);
-                PhotoData element = GalleryAdapter.getItems().get(position);
-                if (element.getAbsolutePath()!=null) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(element.getAbsolutePath());
-                    imageView.setImageBitmap(myBitmap);
-                }
 
-                mapView = (MapView) findViewById(R.id.image_map);
+
+
+            if (position!=-1){
+                mapView = (MapView) findViewById(R.id.path_map);
                 mapView.onCreate(savedInstanceState);
                 mapView.onResume();
                 mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
+
+
+
             }
 
         }

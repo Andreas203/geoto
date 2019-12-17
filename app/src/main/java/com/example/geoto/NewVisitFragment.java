@@ -44,6 +44,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -68,8 +69,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
  */
 public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
-    Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-    Bitmap bmp = Bitmap.createBitmap(80, 80, conf);
+
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final int ACCESS_FINE_LOCATION = 123;
@@ -186,9 +186,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-//        startLocationUpdates();
-//        barometer.startSensingPressure();
-//        thermometer.startSensingTemperature();
+
     }
 
 
@@ -206,13 +204,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             place2 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             if (googleMap != null)
 
-                googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
-                        .title(mLastUpdateTime)
-                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                        // Specifies the anchor to be at a particular point in the marker image.
-                        .anchor(0.5f, 1));
-            //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
 
             if(place1 != null)
                 googleMap.addPolyline(new PolylineOptions()
@@ -271,17 +263,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.new_visit_main, container, false);
 
-
-//        pageViewModel.getPhotoDataToDisplay().observe(this, new Observer<List<PhotoData>>(){
-//            @Override
-//            public void onChanged(@Nullable final List<PhotoData> myPictureList) {
-//                mAdapter = new GalleryAdapter(myPictureList);
-//                mRecyclerView.setAdapter(mAdapter);
-//            }});
-
-
-
-
         barometer = new Barometer(getContext(), this);
         thermometer = new Thermometer(getContext(), this);
 
@@ -311,6 +292,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                 Toast.makeText(getContext(), "New visit started!", Toast.LENGTH_SHORT).show();
                 startDate = new Date();
                 startLocationUpdates();
+                googleMap.setMyLocationEnabled(true);
                 barometer.startSensingPressure();
                 thermometer.startSensingTemperature();
 
@@ -381,6 +363,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
+                                onResume();
                             }
                         });
 
@@ -408,7 +391,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
-
     }
 
     @Override
@@ -419,13 +401,35 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         menu.findItem(R.id.action_sort).setVisible(false);
     }
 
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
     public void  setMarkerImg(PhotoData photoData){
+
         Bitmap bmp = BitmapFactory.decodeFile(photoData.getAbsolutePath());
+
+        getResizedBitmap(bmp,5);
+
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
                 .title(mLastUpdateTime)
                 .icon(BitmapDescriptorFactory.fromBitmap(bmp)));
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

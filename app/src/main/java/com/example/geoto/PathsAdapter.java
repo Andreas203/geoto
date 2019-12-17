@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.geoto.database.LocationData;
 import com.example.geoto.database.PathData;
+import com.example.geoto.database.PhotoData;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,7 +27,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
     static private Context context;
     private static List<PathData> pathItems;
     private static List<LocationData> locItems;
-    private PageViewModel pageViewModel;
+    private static List<PhotoData> photoItems;
 
     public PathsAdapter(List<PathData> items) {
         this.pathItems = items;
@@ -35,6 +36,8 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
     public PathsAdapter() {
         super();
         pathItems = new ArrayList<>();
+        locItems = new ArrayList<>();
+        photoItems = new ArrayList<>();
     }
 
     @Override
@@ -97,16 +100,21 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
     public static List<PathData> getPathItems() {
         return pathItems;
     }
-
-    public static List<LocationData> getLocationItems() {
-        return locItems;
-    }
-
     public static void setPathItems(List<PathData> items) {
         PathsAdapter.pathItems = items;
     }
 
+    public static List<LocationData> getLocationItems() {
+        return locItems;
+    }
     public static void setLocationItems(List<LocationData> items) {
         PathsAdapter.locItems = items;
+    }
+
+    public static List<PhotoData> getPhotoItems() {
+        return photoItems;
+    }
+    public static void setPhotoItems(List<PhotoData> items) {
+        PathsAdapter.photoItems = items;
     }
 }

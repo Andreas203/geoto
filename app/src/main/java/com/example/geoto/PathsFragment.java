@@ -1,5 +1,6 @@
 package com.example.geoto;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -20,6 +22,7 @@ import com.example.geoto.PathsAdapter;
 import com.example.geoto.R;
 import com.example.geoto.database.LocationData;
 import com.example.geoto.database.PathData;
+import com.example.geoto.database.PhotoData;
 
 import java.util.Date;
 import java.util.List;
@@ -84,6 +87,14 @@ public class PathsFragment extends Fragment {
             @Override
             public void onChanged(@Nullable final List<LocationData> pathList) {
                 mAdapter.setLocationItems(pathList);
+                mAdapter.notifyDataSetChanged();
+            }});
+
+        pageViewModel.getPhotoDataToDisplay().observe(this, new Observer<List<PhotoData>>(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onChanged(@Nullable final List<PhotoData> myPictureList) {
+                mAdapter.setPhotoItems(myPictureList);
                 mAdapter.notifyDataSetChanged();
             }});
 

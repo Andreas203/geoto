@@ -54,11 +54,6 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
         mapView.onResume();
         mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
 
-//        LatLng sydney = new LatLng(-34,151);
-//        googleMap.addMarker(new MarkerOptions().position(sydney));
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-
     }
 
 
@@ -77,11 +72,13 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
         if(b != null) {
             position = b.getInt("position");
             if (position!=-1){
-                TextView descriptionView = (TextView) findViewById(R.id.path_description);
-
                 PathData path = PathsAdapter.getPathItems().get(position);
                 Date startDate = path.getStartDate();
                 Date endDate = path.getEndDate();
+
+                TextView descriptionView = (TextView) findViewById(R.id.path_description);
+                descriptionView.setText(path.getDescription());
+
                 List<LocationData> allLocationData = PathsAdapter.getLocationItems();
                 List<LocationData> pathLocationData = new ArrayList<>();
 
@@ -100,16 +97,11 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                     LocationData location = pathLocationData.get(i);
                     double lat = location.getLatitude();
                     double lon = location.getLongitude();
-
-
-
                     place2 = new LatLng(lat, lon);
-
 
                     if (i==0){
                         googleMap.addMarker(new MarkerOptions().position(place2).title("Start"));
                     }
-
                     if (i==pathLocationData.size()-1){
                         googleMap.addMarker(new MarkerOptions().position(place2).title("End"));
 
@@ -130,7 +122,6 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                                             place2)
 
                             );
-
                         }
                         place1 = place2;
                     }

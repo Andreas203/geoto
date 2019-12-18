@@ -5,35 +5,40 @@
 package com.example.geoto;
 
 import android.content.Intent;
-import android.location.Location;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 
 import com.example.geoto.database.LocationData;
 
 import com.example.geoto.database.PathData;
 import com.example.geoto.database.PhotoData;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import pl.aprilapps.easyphotopicker.EasyImage;
 
 
 public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -43,6 +48,8 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
     private MapView mapView;
 
     private PageViewModel pageViewModel;
+
+    private FloatingActionButton backButton;
 
 
     @Override
@@ -54,6 +61,14 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
+
+        backButton = findViewById(R.id.fab_backbutton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 
@@ -171,6 +186,7 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                     LatLng place = new LatLng(lat, lon);
                     Marker marker = googleMap.addMarker(new MarkerOptions().position(place));
                     marker.setTag(photoData.getAbsolutePath());
+
                 }
 
             }

@@ -4,20 +4,16 @@
 
 package com.example.geoto;
 
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.geoto.database.LocationData;
 import com.example.geoto.database.PathData;
@@ -31,6 +27,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Date;
 import java.util.List;
@@ -39,8 +36,10 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
 
     private MapView mapView;
     private GoogleMap googleMap;
-    private Boolean visible = true;
+    private Boolean visible = false;
     private String t_and_p = " ";
+
+    private FloatingActionButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,22 +52,33 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
 
 
 
-        mapView = (MapView) findViewById(R.id.image_map);
+        mapView = (MapView) findViewById(R.id.path_description);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
+
+        backButton = findViewById(R.id.fab_backbutton2);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     public void screenTapped(View view) {
         if (!visible) {
-
             TextView pressureView = (TextView) findViewById(R.id.photo_pressure);
-
             pressureView.setVisibility(pressureView.VISIBLE);
             TextView titleView = (TextView) findViewById(R.id.path_title);
             titleView.setVisibility(titleView.VISIBLE);
             TextView tempView = (TextView) findViewById(R.id.photo_temp);
             tempView.setVisibility(tempView.VISIBLE);
+            // Tap to hide
+            TextView tapView = (TextView) findViewById(R.id.hide_text);
+            tapView.setVisibility(tapView.VISIBLE);
+            tapView.setText("Tap to hide");
+            tapView.setTextColor(Color.BLACK);
             visible = true;
         } else{
             TextView pressureView = (TextView) findViewById(R.id.photo_pressure);
@@ -77,6 +87,9 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
             titleView.setVisibility(titleView.INVISIBLE);
             TextView tempView = (TextView) findViewById(R.id.photo_temp);
             tempView.setVisibility(tempView.INVISIBLE);
+            TextView tapView = (TextView) findViewById(R.id.hide_text);
+            tapView.setText("Tap to show");
+            tapView.setTextColor(Color.WHITE);
             visible = false;
         }
     }

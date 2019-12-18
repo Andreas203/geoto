@@ -1,10 +1,13 @@
 package com.example.geoto;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -47,6 +50,8 @@ public class PathsFragment extends Fragment {
         return fragment;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +69,54 @@ public class PathsFragment extends Fragment {
         //inflate menu
         inflater.inflate(R.menu.menu_main, menu);
         //hide item (sort)
-        menu.findItem(R.id.action_sort).setVisible(false);
+        menu.findItem(R.id.action_sort).setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //handle menu item clicks
+        int id = item.getItemId();
+
+//        if (id == R.id.action_settings) {
+//            //do your function here
+////            Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
+////            Toast.makeText(getContext(), "The settings button has been pressed!", Toast.LENGTH_SHORT).show();
+//        }
+
+        if (id == R.id.action_sort) {
+//            Toast.makeText(getContext(), "The sort button has been pressed!", Toast.LENGTH_SHORT).show();
+            // setup the alert builder
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Choose a sorting style");
+            // add a radio button list
+            String[] animals = {"Date: Old to New", "Date: New to Old"};
+            final int checkedItem = sort; // cow
+            builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sort = which;
+                }
+            });
+
+            // add OK and Cancel buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // user clicked OK
+                    mAdapter.sortPaths(sort);
+                    mAdapter.notifyDataSetChanged();
+
+                }
+            });
+            builder.setNegativeButton("Cancel", null);
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

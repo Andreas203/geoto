@@ -54,6 +54,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -74,21 +75,21 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
+public class NewVisitFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private PendingIntent mLocationPendingIntent;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final int ACCESS_FINE_LOCATION = 123;
 
-    private PageViewModel pageViewModel;
+    private static PageViewModel pageViewModel;
     private MapView mapView;
     private static GoogleMap googleMap;
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
 
     private ExtendedFloatingActionButton mButtonStart;
-    private ExtendedFloatingActionButton mButtonEnd;
+    private static ExtendedFloatingActionButton mButtonEnd;
     private FloatingActionButton fabCamera;
     private FloatingActionButton fabGallery;
 
@@ -97,6 +98,9 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
     private LatLng place1 = null;
     private LatLng place2 = null;
+
+    private static LatLng placeOld = null;
+
     private Date startDate;
     private Date endDate;
     private static FragmentActivity activity;
@@ -110,6 +114,13 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         return fragment;
     }
 
+    public static LatLng getPlaceOld(){
+        return placeOld;
+    }
+
+    public static void setPlaceOld(LatLng oldLocation){
+        placeOld = oldLocation;
+    }
 
     public static FragmentActivity getFragActivity() {
         return activity;
@@ -135,7 +146,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         pageViewModel.insertTemp(tempData);
     }
 
-    public void storeLocation(Location location, Date date) {
+    public static void storeLocation(Location location, Date date) {
         double lat = location.getLatitude();
         double lon = location.getLongitude();
         float acc = location.getAccuracy();
@@ -210,7 +221,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     };
 
     private void startLocationUpdates(Context context) {
-        Intent intent = new Intent(context, LocationService.class);
+        final Intent intent = new Intent(context, LocationService.class);
         mLocationPendingIntent = PendingIntent.getService(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -238,33 +249,11 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                 });
             }
         }
+        System.out.println("THIS IS JUT A TRFS");
     }
 
-    private void initLocations() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        ACCESS_FINE_LOCATION);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-
-            return;
-        }
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
+    static Boolean getButtonState(){
+        return mButtonEnd.isEnabled();
     }
 
     @SuppressLint("MissingPermission")
@@ -337,14 +326,14 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
 
                 startDate = new Date();
-                initLocations();
-                //startLocationUpdates(getContext());
+
                 barometer.startSensingPressure();
                 thermometer.startSensingTemperature();
 
                 if (mButtonEnd != null)
                     mButtonEnd.setEnabled(true);
                 mButtonStart.setEnabled(false);
+                startLocationUpdates(getContext());
                 mButtonStart.hide();
                 mButtonEnd.show();
                 fabCamera.show();
@@ -425,6 +414,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonEnd.setEnabled(false);
 
         initEasyImage();
+        //initLocations();
 
         return root;
     }
@@ -440,6 +430,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
+        googleMap.setOnMarkerClickListener(this);
     }
 
     @Override
@@ -466,20 +457,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    public void  setMarkerImg(PhotoData photoData){
-
-        Bitmap bmp = BitmapFactory.decodeFile(photoData.getAbsolutePath());
-
-        getResizedBitmap(bmp,5);
-
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
-                .title(mLastUpdateTime)
-                .icon(BitmapDescriptorFactory.fromBitmap(bmp)));
-    }
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //handle menu item clicks
@@ -492,5 +469,73 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        EasyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                //Some error handling
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onImagesPicked(List<File> imageFiles, EasyImage.ImageSource source, int type) {
+                onPhotosReturned(imageFiles);
+            }
+
+            @Override
+            public void onCanceled(EasyImage.ImageSource source, int type) {
+                //Cancel handling, you might wanna remove taken photo if it was canceled
+                if (source == EasyImage.ImageSource.CAMERA) {
+                    File photoFile = EasyImage.lastlyTakenButCanceledPhoto(getActivity());
+                    if (photoFile != null) photoFile.delete();
+                }
+            }
+        });
+    }
+
+    /**
+     * add to the database
+     * @param returnedPhotos
+     */
+    private void onPhotosReturned(List<File> returnedPhotos) {
+        for (int i = 0; i < returnedPhotos.size(); i++) {
+            String path = returnedPhotos.get(i).getAbsolutePath();
+            Date date = new Date();
+
+            PhotoData photo = new PhotoData(path, date);
+            pageViewModel.insertPhoto(photo);
+
+            if (i==0) {
+                Marker photoMarker = googleMap.addMarker(new MarkerOptions()
+                        .position(getPlaceOld())
+                        .title(mLastUpdateTime));
+
+                photoMarker.setTag(path);
+            }
+        }
+
+    }
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        System.out.println("GOT TO 0");
+        if (marker.getTag() != null) {
+            System.out.println("GOT TO 1");
+            String absolutePath = (String) marker.getTag();
+
+            Intent intent = new Intent(getContext(), ShowBigImageActivity.class);
+            intent.putExtra("path", absolutePath);
+            this.startActivity(intent);
+
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

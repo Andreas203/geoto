@@ -147,7 +147,6 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                 tempView.setText(temp_var);
 
 
-
                 LocationData locationData;
                 List<LocationData> allLocationData = GalleryAdapter.getLocationItems();
                 if (allLocationData.size() > 0) {
@@ -167,6 +166,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                 LatLng place = new LatLng(lat, lon);
                 googleMap.addMarker(new MarkerOptions().position(place));
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(place, 12);
+                googleMap.animateCamera(update);
             }
         }
     }

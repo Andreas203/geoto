@@ -360,7 +360,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 // GET A TITLE AND DESCRIPTION OF THE PATH FROM THE USER ////////////////////////////
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-                alertDialog.setTitle("Path details");
+                alertDialog.setTitle("Visit details");
 //                alertDialog.setMessage("Enter Path Information");
 
                 LinearLayout layout = new LinearLayout(getContext());
@@ -485,10 +485,10 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         //handle menu item clicks
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            //do your function here
-            Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
-        }
+//        if (id == R.id.action_settings) {
+//            //do your function here
+//            Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
+//        }
 
 
         return super.onOptionsItemSelected(item);

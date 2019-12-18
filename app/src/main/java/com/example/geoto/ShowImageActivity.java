@@ -4,13 +4,20 @@
 
 package com.example.geoto;
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.geoto.database.LocationData;
 import com.example.geoto.database.PathData;
@@ -32,16 +39,46 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
 
     private MapView mapView;
     private GoogleMap googleMap;
+    private Boolean visible = true;
+    private String t_and_p = " ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_image_info);
+
+
 
         mapView = (MapView) findViewById(R.id.image_map);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
+    }
+
+    public void screenTapped(View view) {
+        if (!visible) {
+
+            TextView pressureView = (TextView) findViewById(R.id.photo_pressure);
+
+            pressureView.setVisibility(pressureView.VISIBLE);
+            TextView titleView = (TextView) findViewById(R.id.path_title);
+            titleView.setVisibility(titleView.VISIBLE);
+            TextView tempView = (TextView) findViewById(R.id.photo_temp);
+            tempView.setVisibility(tempView.VISIBLE);
+            visible = true;
+        } else{
+            TextView pressureView = (TextView) findViewById(R.id.photo_pressure);
+            pressureView.setVisibility(pressureView.INVISIBLE);
+            TextView titleView = (TextView) findViewById(R.id.path_title);
+            titleView.setVisibility(titleView.INVISIBLE);
+            TextView tempView = (TextView) findViewById(R.id.photo_temp);
+            tempView.setVisibility(tempView.INVISIBLE);
+            visible = false;
+        }
     }
 
     @Override
@@ -88,7 +125,8 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     }
                 }
                 TextView pressureView = (TextView) findViewById(R.id.photo_pressure);
-                pressureView.setText(Float.toString(pressureData.getPressure()));
+                String pressure_var = Float.toString(pressureData.getPressure()) + " Pa";
+                pressureView.setText(pressure_var);
 
                 TempData tempData;
                 List<TempData> allTempData = GalleryAdapter.getTempItems();
@@ -105,7 +143,9 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     }
                 }
                 TextView tempView = (TextView) findViewById(R.id.photo_temp);
-                tempView.setText(Float.toString(tempData.getTemp()));
+                String temp_var = Float.toString(tempData.getTemp()) + " 'C";
+                tempView.setText(temp_var);
+
 
 
                 LocationData locationData;

@@ -90,6 +90,7 @@ public class MainView extends AppCompatActivity {
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         viewPager.setCurrentItem(1);
@@ -117,13 +118,13 @@ public class MainView extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            System.out.println("The settings button has been pressed!");
-            startActivity(new Intent(this, Settings.class));
-            return true;
-
-        }
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            System.out.println("The settings button has been pressed!");
+//            startActivity(new Intent(this, Settings.class));
+//            return true;
+//
+//        }
 
         return super.onOptionsItemSelected(item);
     }

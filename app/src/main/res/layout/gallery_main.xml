@@ -14,7 +14,7 @@
     <include
         android:id="@+id/include"
         layout="@layout/content_gallery"
-        android:background="#000000" />
+        android:background="#972C2C" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

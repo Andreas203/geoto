@@ -56,7 +56,7 @@ public class GalleryFragment extends Fragment {
     private FloatingActionButton fab_sort_images;
     private View frame_layout_for_sort;
 
-    private int sort = 0;
+    private int sort = 1;
 
 
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2987;
@@ -92,7 +92,7 @@ public class GalleryFragment extends Fragment {
 
         // New stuff
         final RecyclerView mRecyclerView = root.findViewById(R.id.grid_recycler_view);
-        int numberOfColumns = 4;
+        int numberOfColumns = 3;
         mRecyclerView.setLayoutManager(new GridLayoutManager(container.getContext(), numberOfColumns));
         mAdapter = new GalleryAdapter();
         mRecyclerView.setAdapter(mAdapter);
@@ -260,11 +260,11 @@ public class GalleryFragment extends Fragment {
         //handle menu item clicks
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            //do your function here
-//            Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
-//            Toast.makeText(getContext(), "The settings button has been pressed!", Toast.LENGTH_SHORT).show();
-        }
+//        if (id == R.id.action_settings) {
+//            //do your function here
+////            Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
+////            Toast.makeText(getContext(), "The settings button has been pressed!", Toast.LENGTH_SHORT).show();
+//        }
 
         if (id == R.id.action_sort) {
 //            Toast.makeText(getContext(), "The sort button has been pressed!", Toast.LENGTH_SHORT).show();
@@ -272,7 +272,7 @@ public class GalleryFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Choose a sorting style");
             // add a radio button list
-            String[] animals = {"Date: Old to New", "Date: New to Old", "Fuck you Andreas"};
+            String[] animals = {"Date: Old to New", "Date: New to Old"};
             final int checkedItem = sort; // cow
             builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
                 @Override

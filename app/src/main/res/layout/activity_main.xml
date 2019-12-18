@@ -14,9 +14,14 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="?attr/actionBarSize" >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:contentDescription="Geoto"
+                android:layout_height="43dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_launcher_round"/>
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"

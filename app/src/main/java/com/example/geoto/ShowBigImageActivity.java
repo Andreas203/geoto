@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.view.Window;
 import android.widget.ImageView;
 
 import com.example.geoto.database.PhotoData;
@@ -13,6 +16,11 @@ public class ShowBigImageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_big_image);
 
@@ -26,6 +34,8 @@ public class ShowBigImageActivity extends AppCompatActivity {
                 imageView.setImageBitmap(myBitmap);
             }
         }
+
+
     }
 
 }

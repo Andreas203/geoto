@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#444059</color>
-    <color name="colorPrimaryDark">#444059</color>
+    <color name="colorPrimaryDark">#363246</color>
     <color name="colorAccent">#E64447</color>
     <!-- app/src/main/res/values/colors.xml -->
 </resources>

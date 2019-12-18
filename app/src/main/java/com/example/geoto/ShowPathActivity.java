@@ -4,6 +4,7 @@
 
 package com.example.geoto;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -34,12 +36,11 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap googleMap;
     private Polyline line;
     private MapView mapView;
-
 
     private PageViewModel pageViewModel;
 
@@ -64,8 +65,20 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     @Override
+    public boolean onMarkerClick(final Marker marker) {
+        String absolutePath = (String) marker.getTag();
+
+        Intent intent = new Intent(this, ShowBigImageActivity.class);
+        intent.putExtra("path", absolutePath);
+        this.startActivity(intent);
+
+        return true;
+    }
+
+    @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
+        googleMap.setOnMarkerClickListener(this);
 
         Bundle b = getIntent().getExtras();
         int position=-1;
@@ -89,19 +102,8 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                 }
 
-                List<PhotoData> allPhotoData = PathsAdapter.getPhotoItems();
-                List<PhotoData> pathPhotoData = new ArrayList<>();
-                for (int i = 0; i < allPhotoData.size(); i++) {
-                    PhotoData photo = allPhotoData.get(i);
-
-                    if (photo.getDate().after(startDate) && photo.getDate().before(endDate)) {
-                        pathPhotoData.add(photo);
-                    }
-                }
-
                 LatLng place1 = null;
                 LatLng place2 = null;
-
                 for (int i = 0; i < pathLocationData.size(); i++) {
                     LocationData location = pathLocationData.get(i);
                     double lat = location.getLatitude();
@@ -132,6 +134,16 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                 }
 
+                List<PhotoData> allPhotoData = PathsAdapter.getPhotoItems();
+                List<PhotoData> pathPhotoData = new ArrayList<>();
+                for (int i = 0; i < allPhotoData.size(); i++) {
+                    PhotoData photo = allPhotoData.get(i);
+
+                    if (photo.getDate().after(startDate) && photo.getDate().before(endDate)) {
+                        pathPhotoData.add(photo);
+                    }
+                }
+
                 for (int i = 0; i < pathPhotoData.size(); i++) {
                     PhotoData photoData = pathPhotoData.get(i);
 
@@ -151,7 +163,8 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                     double lat = locationData.getLatitude();
                     double lon = locationData.getLongitude();
                     LatLng place = new LatLng(lat, lon);
-                    googleMap.addMarker(new MarkerOptions().position(place));
+                    Marker marker = googleMap.addMarker(new MarkerOptions().position(place));
+                    marker.setTag(photoData.getAbsolutePath());
                 }
 
             }

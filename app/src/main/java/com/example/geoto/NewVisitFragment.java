@@ -150,6 +150,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        setActivity(getActivity());
         super.onCreate(savedInstanceState);
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
         int index = 1;
@@ -337,7 +338,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
                 startDate = new Date();
                 initLocations();
-                startLocationUpdates(getContext());
+                //startLocationUpdates(getContext());
                 barometer.startSensingPressure();
                 thermometer.startSensingTemperature();
 

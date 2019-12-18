@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -33,6 +34,8 @@ public class LocationService extends IntentService {
     public LocationService() {
         super("Location Intent");
     }
+
+    private LatLng place1 = null;
 
 
     /**
@@ -61,14 +64,22 @@ public class LocationService extends IntentService {
                         NewVisitFragment.getFragActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 try {
+                                    NewVisitFragment.getMap().setMyLocationEnabled(true);
+                                    Date date = new Date();
+                                    mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+                                    Log.i("MAP", "new location " + mCurrentLocation.toString());
+                                    LatLng place2 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                                     if (NewVisitFragment.getMap() != null)
-                                        NewVisitFragment.getMap().addMarker(new MarkerOptions().position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
-                                                .title(mLastUpdateTime));
-                                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
-                                    // it centres the camera around the new location
-                                    NewVisitFragment.getMap().moveCamera(CameraUpdateFactory.newLatLng(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude())));
-                                    // it moves the camera to the selected zoom
-                                    NewVisitFragment.getMap().animateCamera(zoom);
+                                        NewVisitFragment.getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
+                                    NewVisitFragment.getMap().setMyLocationEnabled(true);
+                                    if(place1 != null)
+                                        NewVisitFragment.getMap().addPolyline(new PolylineOptions()
+                                                .clickable(true)
+                                                .add(
+                                                        place1,
+                                                        place2)
+                                        );
+                                    place1 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                                 } catch (Exception e) {
                                     Log.e("LocationService", "Error cannot write on map " + e.getMessage());
                                 }

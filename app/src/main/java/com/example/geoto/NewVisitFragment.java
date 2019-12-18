@@ -251,33 +251,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         System.out.println("THIS IS JUT A TRFS");
     }
 
-    private void initLocations() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        ACCESS_FINE_LOCATION);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-
-            return;
-        }
-        //mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
-    }
-
     static Boolean getButtonState(){
         return mButtonEnd.isEnabled();
     }
@@ -440,7 +413,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonEnd.setEnabled(false);
 
         initEasyImage();
-        initLocations();
+        //initLocations();
 
         return root;
     }

@@ -66,13 +66,18 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        String absolutePath = (String) marker.getTag();
+        if (marker.getTag() != null) {
+            String absolutePath = (String) marker.getTag();
 
-        Intent intent = new Intent(this, ShowBigImageActivity.class);
-        intent.putExtra("path", absolutePath);
-        this.startActivity(intent);
+            Intent intent = new Intent(this, ShowBigImageActivity.class);
+            intent.putExtra("path", absolutePath);
+            this.startActivity(intent);
 
-        return true;
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     @Override
@@ -111,11 +116,12 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                     place2 = new LatLng(lat, lon);
 
                     if (i==0){
-                        googleMap.addMarker(new MarkerOptions().position(place2).title("Start"));
+                        Marker start = googleMap.addMarker(new MarkerOptions().position(place2).title("Start"));
+                        start.setTag(null);
                     }
                     if (i==pathLocationData.size()-1){
-                        googleMap.addMarker(new MarkerOptions().position(place2).title("End"));
-
+                        Marker end = googleMap.addMarker(new MarkerOptions().position(place2).title("End"));
+                        end.setTag(null);
                     }
 
                     if (googleMap != null) {

@@ -54,6 +54,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -74,7 +75,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
+public class NewVisitFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private PendingIntent mLocationPendingIntent;
 
@@ -429,6 +430,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
+        googleMap.setOnMarkerClickListener(this);
     }
 
     @Override
@@ -455,20 +457,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    public void  setMarkerImg(PhotoData photoData){
-
-        Bitmap bmp = BitmapFactory.decodeFile(photoData.getAbsolutePath());
-
-        getResizedBitmap(bmp,5);
-
-        googleMap.addMarker(new MarkerOptions()
-                .position(getPlaceOld())
-                .title(mLastUpdateTime)
-                .icon(BitmapDescriptorFactory.fromBitmap(bmp)));
-    }
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //handle menu item clicks
@@ -481,5 +469,73 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        EasyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                //Some error handling
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onImagesPicked(List<File> imageFiles, EasyImage.ImageSource source, int type) {
+                onPhotosReturned(imageFiles);
+            }
+
+            @Override
+            public void onCanceled(EasyImage.ImageSource source, int type) {
+                //Cancel handling, you might wanna remove taken photo if it was canceled
+                if (source == EasyImage.ImageSource.CAMERA) {
+                    File photoFile = EasyImage.lastlyTakenButCanceledPhoto(getActivity());
+                    if (photoFile != null) photoFile.delete();
+                }
+            }
+        });
+    }
+
+    /**
+     * add to the database
+     * @param returnedPhotos
+     */
+    private void onPhotosReturned(List<File> returnedPhotos) {
+        for (int i = 0; i < returnedPhotos.size(); i++) {
+            String path = returnedPhotos.get(i).getAbsolutePath();
+            Date date = new Date();
+
+            PhotoData photo = new PhotoData(path, date);
+            pageViewModel.insertPhoto(photo);
+
+            if (i==0) {
+                Marker photoMarker = googleMap.addMarker(new MarkerOptions()
+                        .position(getPlaceOld())
+                        .title(mLastUpdateTime));
+
+                photoMarker.setTag(path);
+            }
+        }
+
+    }
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        System.out.println("GOT TO 0");
+        if (marker.getTag() != null) {
+            System.out.println("GOT TO 1");
+            String absolutePath = (String) marker.getTag();
+
+            Intent intent = new Intent(getContext(), ShowBigImageActivity.class);
+            intent.putExtra("path", absolutePath);
+            this.startActivity(intent);
+
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

@@ -107,7 +107,6 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                 TextView tempView = (TextView) findViewById(R.id.photo_temp);
                 tempView.setText(Float.toString(tempData.getTemp()));
 
-
                 LocationData locationData;
                 List<LocationData> allLocationData = GalleryAdapter.getLocationItems();
                 if (allLocationData.size() > 0) {
@@ -127,6 +126,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                 LatLng place = new LatLng(lat, lon);
                 googleMap.addMarker(new MarkerOptions().position(place));
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(place, 12);
+                googleMap.animateCamera(update);
             }
         }
     }

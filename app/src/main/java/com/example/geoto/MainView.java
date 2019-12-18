@@ -37,8 +37,6 @@ public class MainView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-//        setTheme(R.style.Trash);
-        initLocations();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -78,7 +76,7 @@ public class MainView extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         viewPager.setCurrentItem(1);
-
+        initLocations();
         checkPermissions(this);
         System.out.println("permissions have been checked");
 
@@ -193,7 +191,7 @@ public class MainView extends AppCompatActivity {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         if (fragments != null) {
             for (Fragment f : fragments) {
-                if (f instanceof GalleryFragment) {
+                if (f instanceof NewVisitFragment) {
                     f.onActivityResult(requestCode, resultCode, data);
                 }
             }

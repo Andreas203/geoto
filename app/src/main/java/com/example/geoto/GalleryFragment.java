@@ -191,62 +191,6 @@ public class GalleryFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        EasyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
-            @Override
-            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
-                //Some error handling
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onImagesPicked(List<File> imageFiles, EasyImage.ImageSource source, int type) {
-                onPhotosReturned(imageFiles);
-            }
-
-            @Override
-            public void onCanceled(EasyImage.ImageSource source, int type) {
-                //Cancel handling, you might wanna remove taken photo if it was canceled
-                if (source == EasyImage.ImageSource.CAMERA) {
-                    File photoFile = EasyImage.lastlyTakenButCanceledPhoto(getActivity());
-                    if (photoFile != null) photoFile.delete();
-                }
-            }
-        });
-    }
-
-
-    /**
-     * add to the grid
-     * @param returnedPhotos
-     */
-    private void onPhotosReturned(List<File> returnedPhotos) {
-
-        for (int i = 0; i < returnedPhotos.size(); i++) {
-            String path = returnedPhotos.get(i).getAbsolutePath();
-            Date date = new Date();
-
-            PhotoData photo = new PhotoData(path, date);
-
-            if (i==0) {
-                List<Fragment> fragments = getFragmentManager().getFragments();
-                if (fragments != null) {
-                    for (Fragment f : fragments) {
-                        if (f instanceof NewVisitFragment) {
-                            ((NewVisitFragment) f).setMarkerImg(photo);
-                        }
-                    }
-                }
-            }
-
-            pageViewModel.insertPhoto(photo);
-        }
-
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //inflate menu
         inflater.inflate(R.menu.menu_main, menu);

@@ -206,35 +206,64 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         }
     };
 
-    private void startLocationUpdates() {
-        Intent intent = new Intent(getContext(), LocationService.class);
-        mLocationPendingIntent = PendingIntent.getService(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Task<Void> locationTask = mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                    mLocationPendingIntent);
-            if (locationTask != null) {
-                System.out.println("HERE IT IS PLEASE BE");
-                locationTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (e instanceof ApiException) {
-                            Log.w("MapsActivity", ((ApiException) e).getStatusMessage());
-                        } else {
-                            Log.w("MapsActivity", e.getMessage());
-                        }
-                    }
-                });
+//    private void startLocationUpdates() {
+//        Intent intent = new Intent(getContext(), LocationService.class);
+//        mLocationPendingIntent = PendingIntent.getService(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+//                || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//            Task<Void> locationTask = mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+//                    mLocationPendingIntent);
+//            if (locationTask != null) {
+//                System.out.println("HERE IT IS PLEASE BE");
+//                locationTask.addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        if (e instanceof ApiException) {
+//                            Log.w("MapsActivity", ((ApiException) e).getStatusMessage());
+//                        } else {
+//                            Log.w("MapsActivity", e.getMessage());
+//                        }
+//                    }
+//                });
+//
+//                locationTask.addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        System.out.println("HERE IT IS PLEASE BE");
+//                        Log.d("MapsActivity", "restarting gps successful!");
+//                    }
+//                });
+//            }
+//        }
+//        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
+//    }
 
-                locationTask.addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        System.out.println("HERE IT IS PLEASE BE");
-                        Log.d("MapsActivity", "restarting gps successful!");
-                    }
-                });
+    private void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        ACCESS_FINE_LOCATION);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
             }
+
+            return;
         }
+        googleMap.setMyLocationEnabled(true);
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
     }
 
@@ -309,7 +338,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
                 startDate = new Date();
                 startLocationUpdates();
-                googleMap.setMyLocationEnabled(true);
                 barometer.startSensingPressure();
                 thermometer.startSensingTemperature();
 

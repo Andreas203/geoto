@@ -35,7 +35,7 @@ public class LocationService extends IntentService {
         super("Location Intent");
     }
 
-    private LatLng place1 = null;
+
 
 
     /**
@@ -46,7 +46,6 @@ public class LocationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (LocationResult.hasResult(intent)) {
-            System.out.println("I HAVE REACHED HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             LocationResult locResults = LocationResult.extractResult(intent);
             if (locResults != null) {
                 for (Location location : locResults.getLocations()) {
@@ -57,7 +56,10 @@ public class LocationService extends IntentService {
                     mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
                     Log.i("MAP", "new location " + mCurrentLocation.toString());
                     // check if the activity has not been closed in the meantime
-                    if (NewVisitFragment.getFragActivity()!=null){
+                    if (!NewVisitFragment.getButtonState()){
+                        NewVisitFragment.setPlaceOld(null);
+                    }
+                    if (NewVisitFragment.getFragActivity()!=null && NewVisitFragment.getButtonState()){
                         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         // any modification of the user interface must be done on the UI Thread. The Intent Service is running
                         // in its own thread, so it cannot communicate with the UI.
@@ -72,14 +74,15 @@ public class LocationService extends IntentService {
                                     if (NewVisitFragment.getMap() != null)
                                         NewVisitFragment.getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
                                     NewVisitFragment.getMap().setMyLocationEnabled(true);
-                                    if(place1 != null)
+                                    if(NewVisitFragment.getPlaceOld() != null)
                                         NewVisitFragment.getMap().addPolyline(new PolylineOptions()
                                                 .clickable(true)
                                                 .add(
-                                                        place1,
+                                                        NewVisitFragment.getPlaceOld(),
                                                         place2)
                                         );
-                                    place1 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                                    NewVisitFragment.setPlaceOld(place2);
+                                    NewVisitFragment.storeLocation(mCurrentLocation,date);
                                 } catch (Exception e) {
                                     Log.e("LocationService", "Error cannot write on map " + e.getMessage());
                                 }

@@ -81,14 +81,14 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final int ACCESS_FINE_LOCATION = 123;
 
-    private PageViewModel pageViewModel;
+    private static PageViewModel pageViewModel;
     private MapView mapView;
     private static GoogleMap googleMap;
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
 
     private ExtendedFloatingActionButton mButtonStart;
-    private ExtendedFloatingActionButton mButtonEnd;
+    private static ExtendedFloatingActionButton mButtonEnd;
     private FloatingActionButton fabCamera;
     private FloatingActionButton fabGallery;
 
@@ -97,6 +97,9 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
     private LatLng place1 = null;
     private LatLng place2 = null;
+
+    private static LatLng placeOld = null;
+
     private Date startDate;
     private Date endDate;
     private static FragmentActivity activity;
@@ -110,6 +113,13 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         return fragment;
     }
 
+    public static LatLng getPlaceOld(){
+        return placeOld;
+    }
+
+    public static void setPlaceOld(LatLng oldLocation){
+        placeOld = oldLocation;
+    }
 
     public static FragmentActivity getFragActivity() {
         return activity;
@@ -135,7 +145,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         pageViewModel.insertTemp(tempData);
     }
 
-    public void storeLocation(Location location, Date date) {
+    public static void storeLocation(Location location, Date date) {
         double lat = location.getLatitude();
         double lon = location.getLongitude();
         float acc = location.getAccuracy();
@@ -210,7 +220,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
     };
 
     private void startLocationUpdates(Context context) {
-        Intent intent = new Intent(context, LocationService.class);
+        final Intent intent = new Intent(context, LocationService.class);
         mLocationPendingIntent = PendingIntent.getService(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -238,6 +248,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
                 });
             }
         }
+        System.out.println("THIS IS JUT A TRFS");
     }
 
     private void initLocations() {
@@ -264,7 +275,11 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
             return;
         }
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
+        //mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
+    }
+
+    static Boolean getButtonState(){
+        return mButtonEnd.isEnabled();
     }
 
     @SuppressLint("MissingPermission")
@@ -337,14 +352,14 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
 
                 startDate = new Date();
-                initLocations();
-                //startLocationUpdates(getContext());
+
                 barometer.startSensingPressure();
                 thermometer.startSensingTemperature();
 
                 if (mButtonEnd != null)
                     mButtonEnd.setEnabled(true);
                 mButtonStart.setEnabled(false);
+                startLocationUpdates(getContext());
                 mButtonStart.hide();
                 mButtonEnd.show();
                 fabCamera.show();
@@ -425,6 +440,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         mButtonEnd.setEnabled(false);
 
         initEasyImage();
+        initLocations();
 
         return root;
     }
@@ -473,7 +489,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         getResizedBitmap(bmp,5);
 
         googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
+                .position(getPlaceOld())
                 .title(mLastUpdateTime)
                 .icon(BitmapDescriptorFactory.fromBitmap(bmp)));
     }

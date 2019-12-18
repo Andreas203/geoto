@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.example.geoto.database.PhotoData;
-
 import java.util.List;
 
 public class ShowBigImageActivity extends AppCompatActivity {

@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         debug {
-            storeFile file('C:\\Users\\User\\geoto.jks')
+            storeFile file('geoto.jks')
             storePassword 'geotoiscool'
             keyAlias = 'geoto'
             keyPassword 'geotoiscool'

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,6 +54,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
                 parent, false);
         View_Holder holder = new View_Holder(v);
         context = parent.getContext();
+
         return holder;
     }
 

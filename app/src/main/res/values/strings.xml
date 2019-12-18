@@ -15,5 +15,7 @@
     <string name="extended_fab_label1">Start</string>
     <string name="extended_fab_label2">End</string>
 
+    <string name="no_data_available">Gallery empty</string>
+    <string name="no_paths_available">Paths empty</string>
 
 </resources>

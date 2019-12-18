@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,6 +74,7 @@ public class PathsFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.paths_main, container, false);
         final RecyclerView mRecyclerView = root.findViewById(R.id.paths_recycler_view);
+        final TextView emptyView = root.findViewById(R.id.empty_paths);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
         mAdapter = new PathsAdapter();
         mRecyclerView.setAdapter(mAdapter);
@@ -80,6 +82,14 @@ public class PathsFragment extends Fragment {
         pageViewModel.getPathDataToDisplay().observe(this, new Observer<List<PathData>>(){
             @Override
             public void onChanged(@Nullable final List<PathData> pathList) {
+                if (pathList.isEmpty()) {
+                    mRecyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
                 mAdapter.setPathItems(pathList);
                 mAdapter.sortPaths(sort);
                 mAdapter.notifyDataSetChanged();

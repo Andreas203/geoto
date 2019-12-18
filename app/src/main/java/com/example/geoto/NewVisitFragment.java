@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -184,6 +185,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
             mCurrentLocation = locationResult.getLastLocation();
+            googleMap.setMyLocationEnabled(true);
             Date date = new Date();
             mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
             Log.i("MAP", "new location " + mCurrentLocation.toString());
@@ -191,7 +193,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             if (googleMap != null)
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
-
+            googleMap.setMyLocationEnabled(true);
             if(place1 != null)
                 googleMap.addPolyline(new PolylineOptions()
                         .clickable(true)
@@ -206,44 +208,42 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
         }
     };
 
-//    private void startLocationUpdates() {
-//        Intent intent = new Intent(getContext(), LocationService.class);
-//        mLocationPendingIntent = PendingIntent.getService(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-//                || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            Task<Void> locationTask = mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-//                    mLocationPendingIntent);
-//            if (locationTask != null) {
-//                System.out.println("HERE IT IS PLEASE BE");
-//                locationTask.addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        if (e instanceof ApiException) {
-//                            Log.w("MapsActivity", ((ApiException) e).getStatusMessage());
-//                        } else {
-//                            Log.w("MapsActivity", e.getMessage());
-//                        }
-//                    }
-//                });
-//
-//                locationTask.addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        System.out.println("HERE IT IS PLEASE BE");
-//                        Log.d("MapsActivity", "restarting gps successful!");
-//                    }
-//                });
-//            }
-//        }
-//        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
-//    }
+    private void startLocationUpdates(Context context) {
+        Intent intent = new Intent(context, LocationService.class);
+        mLocationPendingIntent = PendingIntent.getService(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Task<Void> locationTask = mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                    mLocationPendingIntent);
+            if (locationTask != null) {
+                System.out.println("HERE IT IS PLEASE BE");
+                locationTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (e instanceof ApiException) {
+                            Log.w("MapsActivity", ((ApiException) e).getStatusMessage());
+                        } else {
+                            Log.w("MapsActivity", e.getMessage());
+                        }
+                    }
+                });
 
-    private void startLocationUpdates() {
+                locationTask.addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        System.out.println("HERE IT IS PLEASE BE");
+                        Log.d("MapsActivity", "restarting gps successful!");
+                    }
+                });
+            }
+        }
+    }
+
+    private void initLocations() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
@@ -263,7 +263,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
 
             return;
         }
-        googleMap.setMyLocationEnabled(true);
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
     }
 
@@ -337,7 +336,8 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
 
                 startDate = new Date();
-                startLocationUpdates();
+                initLocations();
+                startLocationUpdates(getContext());
                 barometer.startSensingPressure();
                 thermometer.startSensingTemperature();
 

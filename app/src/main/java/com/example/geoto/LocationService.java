@@ -54,8 +54,8 @@ public class LocationService extends IntentService {
                     mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
                     Log.i("MAP", "new location " + mCurrentLocation.toString());
                     // check if the activity has not been closed in the meantime
-                    if (NewVisitFragment.getFragActivity()!=null)
-                        System.out.println("I HAVE REACHED HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    if (NewVisitFragment.getFragActivity()!=null){
+                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         // any modification of the user interface must be done on the UI Thread. The Intent Service is running
                         // in its own thread, so it cannot communicate with the UI.
                         NewVisitFragment.getFragActivity().runOnUiThread(new Runnable() {
@@ -69,11 +69,12 @@ public class LocationService extends IntentService {
                                     NewVisitFragment.getMap().moveCamera(CameraUpdateFactory.newLatLng(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude())));
                                     // it moves the camera to the selected zoom
                                     NewVisitFragment.getMap().animateCamera(zoom);
-                                } catch (Exception e ){
-                                    Log.e("LocationService", "Error cannot write on map "+e.getMessage());
+                                } catch (Exception e) {
+                                    Log.e("LocationService", "Error cannot write on map " + e.getMessage());
                                 }
                             }
                         });
+                    }
                 }
             }
 

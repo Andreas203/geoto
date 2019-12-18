@@ -55,6 +55,7 @@ public class GalleryFragment extends Fragment {
 
     private FloatingActionButton fab_sort_images;
     private View frame_layout_for_sort;
+    private FloatingActionButton backButton;
 
     private int sort = 1;
 

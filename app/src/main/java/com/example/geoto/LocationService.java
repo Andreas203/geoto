@@ -58,7 +58,7 @@ public class LocationService extends IntentService {
                     // check if the activity has not been closed in the meantime
                     if (!NewVisitFragment.getButtonState()){
                         NewVisitFragment.setPlaceOld(null);
-                        NewVisitFragment.getFragActivity().stopService(intent);
+                        this.stopSelf();
                     }
                     if (NewVisitFragment.getFragActivity()!=null && NewVisitFragment.getButtonState()){
                         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017. This code has been developed by Fabio Ciravegna, The University of Sheffield. All rights reserved. No part of this code can be used without the explicit written permission by the author
+  -->
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#202124"
+    android:padding="0dp">
+
+    <TextView
+        android:id="@+id/path_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#6200EA"
+        android:gravity="bottom"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/path_description"
+        android:layout_width="match_parent"
+        android:layout_height="578dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="80dp"
+        android:gravity="bottom"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="171dp" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

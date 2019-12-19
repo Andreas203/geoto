@@ -8,6 +8,9 @@ import androidx.room.Query;
 
 import java.util.List;
 
+/**
+ * An interface to access the photos in the db
+ */
 @Dao
 public interface PhotoDAO {
     @Insert

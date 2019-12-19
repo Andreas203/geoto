@@ -9,6 +9,9 @@ import androidx.room.Query;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * An interface to access the locations in the db
+ */
 @Dao
 public interface LocationDAO {
     @Insert

@@ -7,6 +7,9 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+/**
+ * A class to represent our room database
+ */
 @androidx.room.Database(entities = {PhotoData.class, PathData.class, LocationData.class, TempData.class, PressureData.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class MyRoomDatabase extends RoomDatabase {

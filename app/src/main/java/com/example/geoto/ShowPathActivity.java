@@ -40,7 +40,9 @@ import java.util.List;
 
 import pl.aprilapps.easyphotopicker.EasyImage;
 
-
+/**
+ * The activity to display a single path's information
+ */
 public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap googleMap;
@@ -51,7 +53,12 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
 
     private FloatingActionButton backButton;
 
-
+    /**
+     * Called when the show path activity is first created.
+     * Initialises the google map to display.
+     * Creates a return button.
+     * @param savedInstanceState the current state of the application
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,13 +79,20 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
 
     }
 
-
+    /**
+     * Resumes the activity
+     */
     @Override
     public void onResume() {
         super.onResume();
 
     }
 
+    /**
+     * When an image marker is clicked the image at that location is displayed
+     * @param marker the clicked marker
+     * @return whether it was handled
+     */
     @Override
     public boolean onMarkerClick(final Marker marker) {
         if (marker.getTag() != null) {
@@ -95,6 +109,12 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
 
     }
 
+    /**
+     * The callback for the map initialisation.
+     * Displays the path map.
+     * Displays the path description.
+     * @param map the google map to display
+     */
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
@@ -105,13 +125,16 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
         if(b != null) {
             position = b.getInt("position");
             if (position!=-1){
+                // Retrieves the current path and relevant dates
                 PathData path = PathsAdapter.getPathItems().get(position);
                 Date startDate = path.getStartDate();
                 Date endDate = path.getEndDate();
 
+                // Displays the path description
                 TextView descriptionView = (TextView) findViewById(R.id.path_description);
                 descriptionView.setText(path.getDescription());
 
+                // Retrieves the path's locations
                 List<LocationData> allLocationData = PathsAdapter.getLocationItems();
                 List<LocationData> pathLocationData = new ArrayList<>();
                 for (int i = 0; i < allLocationData.size(); i++) {
@@ -124,12 +147,14 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
 
                 LatLng place1 = null;
                 LatLng place2 = null;
+                // Displays the photo's path on the map
                 for (int i = 0; i < pathLocationData.size(); i++) {
                     LocationData location = pathLocationData.get(i);
                     double lat = location.getLatitude();
                     double lon = location.getLongitude();
                     place2 = new LatLng(lat, lon);
 
+                    // Display start and end markers
                     if (i==0){
                         Marker start = googleMap.addMarker(new MarkerOptions().position(place2).title("Start")
                                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
@@ -140,6 +165,7 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                         end.setTag(null);
                     }
 
+                    // Plotting the path line
                     if (googleMap != null) {
                         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(place2, 12);
                         googleMap.animateCamera(update);
@@ -156,6 +182,7 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                 }
 
+                // Retrieves all the path photos
                 List<PhotoData> allPhotoData = PathsAdapter.getPhotoItems();
                 List<PhotoData> pathPhotoData = new ArrayList<>();
                 for (int i = 0; i < allPhotoData.size(); i++) {
@@ -166,6 +193,7 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                 }
 
+                // Displays all of the path photos on the map as markers
                 for (int i = 0; i < pathPhotoData.size(); i++) {
                     PhotoData photoData = pathPhotoData.get(i);
 

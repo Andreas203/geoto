@@ -38,15 +38,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The activity to display all of an images information from the gallery
+ */
 public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap googleMap;
     private Boolean visible = false;
-    private String t_and_p = " ";
 
     private FloatingActionButton backButton;
 
+    /**
+     * Called when the show image activity is first created.
+     * Initialises the google map to display.
+     * Creates a return button.
+     * @param savedInstanceState the current state of the application
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -55,8 +63,6 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_image_info);
-
-
 
         mapView = (MapView) findViewById(R.id.path_description);
         mapView.onCreate(savedInstanceState);
@@ -72,6 +78,10 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
+    /**
+     * Hides and shows the image reading values
+     * @param view the current view
+     */
     public void screenTapped(View view) {
         if (!visible) {
             TextView pressureView = (TextView) findViewById(R.id.photo_pressure);
@@ -100,6 +110,13 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * The callback for the map initialisation.
+     * Displays the image.
+     * Displays the image readings.
+     * Displays the image path map.
+     * @param map the google map to display
+     */
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
@@ -109,6 +126,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
         if(b != null) {
             position = b.getInt("position");
             if (position!=-1){
+                // Retrieves the current photo and displays it
                 List<PhotoData> allPhotoData = GalleryAdapter.getPhotoItems();
                 PhotoData photoData = allPhotoData.get(position);
                 ImageView imageView = (ImageView) findViewById(R.id.image);
@@ -117,6 +135,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     imageView.setImageBitmap(myBitmap);
                 }
 
+                // Retrieves the photo's path and displays the title
                 PathData pathData = null;
                 List<PathData> allPathData = GalleryAdapter.getPathItems();
                 for (int i = 0; i < allPathData.size(); i++) {
@@ -132,6 +151,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                 Date startDate = pathData.getStartDate();
                 Date endDate = pathData.getEndDate();
 
+                // Retrieves the photo's pressure and displays it
                 PressureData pressureData;
                 List<PressureData> allPressureData = GalleryAdapter.getPressureItems();
                 if (allPressureData.size() > 0) {
@@ -149,6 +169,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                 TextView pressureView = (TextView) findViewById(R.id.photo_pressure);
                 pressureView.setText(Float.toString(pressureData.getPressure()));
 
+                // Retrieves the photo's temperature and displays it
                 TempData tempData;
                 List<TempData> allTempData = GalleryAdapter.getTempItems();
                 if (allTempData.size() > 0) {
@@ -166,6 +187,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                 TextView tempView = (TextView) findViewById(R.id.photo_temp);
                 tempView.setText(Float.toString(tempData.getTemp()));
 
+                // Retrieves the photo's path locations
                 List<LocationData> allLocationData = GalleryAdapter.getLocationItems();
                 List<LocationData> pathLocationData = new ArrayList<>();
                 for (int i = 0; i < allLocationData.size(); i++) {
@@ -176,6 +198,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     }
                 }
 
+                // Retrieves all the photos on this photo's same path
                 List<PhotoData> pathPhotoData = new ArrayList<>();
                 for (int i = 0; i < allPhotoData.size(); i++) {
                     PhotoData photo = allPhotoData.get(i);
@@ -188,12 +211,14 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                 LatLng place1 = null;
                 LatLng place2 = null;
 
+                // Displays the photo's path on the map
                 for (int i = 0; i < pathLocationData.size(); i++) {
                     LocationData location = pathLocationData.get(i);
                     double lat = location.getLatitude();
                     double lon = location.getLongitude();
                     place2 = new LatLng(lat, lon);
 
+                    // Display start and end markers
                     if (i==0){
                         googleMap.addMarker(new MarkerOptions().position(place2).title("Start")
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
@@ -203,6 +228,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
 
                     }
 
+                    // Plotting the path line
                     if (googleMap != null) {
 
                         if (place1 != null) {
@@ -217,6 +243,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     }
                 }
 
+                // Displays all of the path photos on the map as markers
                 for (int i = 0; i < pathPhotoData.size(); i++) {
                     PhotoData pathPhoto = pathPhotoData.get(i);
 

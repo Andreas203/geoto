@@ -12,8 +12,15 @@ import android.widget.ImageView;
 import com.example.geoto.database.PhotoData;
 import java.util.List;
 
+/**
+ * The activity to display an image full screen
+ */
 public class ShowBigImageActivity extends AppCompatActivity {
-
+    /**
+     * Called when the show big image activity is first created
+     * Displays an image full screen
+     * @param savedInstanceState the current state of the application
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

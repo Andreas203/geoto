@@ -16,7 +16,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity android:name=".ShowBigImageActivity"/>
         <activity android:name=".ShowPathActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
         <meta-data

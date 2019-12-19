@@ -55,7 +55,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.View_Holder>
     public void onBindViewHolder(final View_Holder holder, final int position) {
         Date date = pathItems.get(position).startDate;
 
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         String newDate = df.format(date);
 
 

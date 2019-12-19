@@ -228,7 +228,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
             Task<Void> locationTask = mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                     mLocationPendingIntent);
             if (locationTask != null) {
-                System.out.println("HERE IT IS PLEASE BE");
                 locationTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -249,7 +248,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
                 });
             }
         }
-        System.out.println("THIS IS JUT A TRFS");
     }
 
     static Boolean getButtonState(){

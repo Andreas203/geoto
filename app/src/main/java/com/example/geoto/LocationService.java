@@ -35,9 +35,6 @@ public class LocationService extends IntentService {
         super("Location Intent");
     }
 
-
-
-
     /**
      * called when a location is recognised
      *

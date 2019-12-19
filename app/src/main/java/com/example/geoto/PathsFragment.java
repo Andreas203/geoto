@@ -148,24 +148,16 @@ public class PathsFragment extends Fragment {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //handle menu item clicks
+        // Handle menu item clicks
         int id = item.getItemId();
 
-//        if (id == R.id.action_settings) {
-//            //do your function here
-////            Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
-////            Toast.makeText(getContext(), "The settings button has been pressed!", Toast.LENGTH_SHORT).show();
-//        }
-
         if (id == R.id.action_sort) {
-//            Toast.makeText(getContext(), "The sort button has been pressed!", Toast.LENGTH_SHORT).show();
-            // setup the alert builder
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Choose a sorting style");
             // add a radio button list
-            String[] animals = {"Date: Old to New", "Date: New to Old"};
-            final int checkedItem = sort; // cow
-            builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
+            String[] sortOptions = {"Date: Old to New", "Date: New to Old"};
+            final int checkedItem = sort;
+            builder.setSingleChoiceItems(sortOptions, checkedItem, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     sort = which;

@@ -81,7 +81,6 @@ public class LocationService extends IntentService {
                                     LatLng place2 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                                     if (NewVisitFragment.getMap() != null)
                                         NewVisitFragment.getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
-                                    NewVisitFragment.getMap().setMyLocationEnabled(true);
                                     if(NewVisitFragment.getPlaceOld() != null) {
                                         NewVisitFragment.getMap().addPolyline(new PolylineOptions()
                                                 .clickable(true)

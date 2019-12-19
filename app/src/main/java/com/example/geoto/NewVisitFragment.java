@@ -191,8 +191,14 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
                 startLocationUpdates(getContext());
                 mButtonStart.hide();
                 mButtonEnd.show();
-                fabCamera.show();
+
                 fabGallery.show();
+
+                //Only show camera icon if phone has camera
+                if (getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+                    // this device has a camera
+                    fabCamera.show();
+                }
             }
         });
         mButtonStart.setEnabled(true);
@@ -400,7 +406,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
             mCurrentLocation = locationResult.getLastLocation();
-            googleMap.setMyLocationEnabled(true);
+
             Date date = new Date();
             mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
             Log.i("MAP", "new location " + mCurrentLocation.toString());
@@ -449,7 +455,6 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
                 locationTask.addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        System.out.println("HERE IT IS PLEASE BE");
                         Log.d("MapsActivity", "restarting gps successful!");
                     }
                 });
@@ -518,6 +523,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
     public void onMapReady(GoogleMap map) {
         googleMap = map;
         googleMap.setOnMarkerClickListener(this);
+        googleMap.setMyLocationEnabled(true);
     }
 
     /**

@@ -195,7 +195,8 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     place2 = new LatLng(lat, lon);
 
                     if (i==0){
-                        googleMap.addMarker(new MarkerOptions().position(place2).title("Start"));
+                        googleMap.addMarker(new MarkerOptions().position(place2).title("Start")
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
                     }
                     if (i==pathLocationData.size()-1){
                         googleMap.addMarker(new MarkerOptions().position(place2).title("End"));
@@ -203,8 +204,6 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     }
 
                     if (googleMap != null) {
-                        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(place2, 12);
-                        googleMap.animateCamera(update);
 
                         if (place1 != null) {
                             googleMap.addPolyline(new PolylineOptions()
@@ -242,11 +241,14 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     Canvas canvas = new Canvas();
 
                     if (pathPhoto.equals(photoData)) {
-                        Bitmap bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth()*2, icon.getIntrinsicHeight()*2, Bitmap.Config.ARGB_8888);
+                        Bitmap bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth()*3, icon.getIntrinsicHeight()*3, Bitmap.Config.ARGB_8888);
                         canvas.setBitmap(bitmap);
-                        icon.setBounds(0, 0, icon.getIntrinsicWidth()*2, icon.getIntrinsicHeight()*2);
+                        icon.setBounds(0, 0, icon.getIntrinsicWidth()*3, icon.getIntrinsicHeight()*3);
                         icon.draw(canvas);
                         googleMap.addMarker(new MarkerOptions().position(place).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
+                        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(place, 11);
+                        googleMap.animateCamera(update);
+
                     } else {
                         Bitmap bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
                         canvas.setBitmap(bitmap);

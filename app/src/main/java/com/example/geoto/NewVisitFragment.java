@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
@@ -317,8 +318,8 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
         });
         fabGallery.hide();
 
-        mButtonStart = (ExtendedFloatingActionButton) root.findViewById(R.id.button_start);
 
+        mButtonStart = (ExtendedFloatingActionButton) root.findViewById(R.id.button_start);
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -493,9 +494,17 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
             pageViewModel.insertPhoto(photo);
 
             if (i==0) {
+                Drawable icon = getResources().getDrawable(R.drawable.ic_insert_photo_blue_24dp);
+                Canvas canvas = new Canvas();
+                Bitmap bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                canvas.setBitmap(bitmap);
+                icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+                icon.draw(canvas);
+
                 Marker photoMarker = googleMap.addMarker(new MarkerOptions()
                         .position(getPlaceOld())
-                        .title(mLastUpdateTime));
+                        .title(mLastUpdateTime)
+                        .icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
 
                 photoMarker.setTag(path);
             }

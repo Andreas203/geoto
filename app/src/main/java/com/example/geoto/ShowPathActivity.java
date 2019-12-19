@@ -131,7 +131,8 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                     place2 = new LatLng(lat, lon);
 
                     if (i==0){
-                        Marker start = googleMap.addMarker(new MarkerOptions().position(place2).title("Start"));
+                        Marker start = googleMap.addMarker(new MarkerOptions().position(place2).title("Start")
+                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
                         start.setTag(null);
                     }
                     if (i==pathLocationData.size()-1){
@@ -184,7 +185,14 @@ public class ShowPathActivity extends AppCompatActivity implements OnMapReadyCal
                     double lat = locationData.getLatitude();
                     double lon = locationData.getLongitude();
                     LatLng place = new LatLng(lat, lon);
-                    Marker marker = googleMap.addMarker(new MarkerOptions().position(place));
+                    Drawable icon = getResources().getDrawable(R.drawable.ic_insert_photo_blue_24dp);
+                    Canvas canvas = new Canvas();
+                    Bitmap bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                    canvas.setBitmap(bitmap);
+                    icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+                    icon.draw(canvas);
+
+                    Marker marker = googleMap.addMarker(new MarkerOptions().position(place).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
                     marker.setTag(photoData.getAbsolutePath());
 
                 }

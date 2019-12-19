@@ -16,7 +16,9 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -58,12 +60,12 @@ public class LocationService extends IntentService {
                         this.stopSelf();
                     }
                     if (NewVisitFragment.getFragActivity()!=null && NewVisitFragment.getButtonState()){
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         // any modification of the user interface must be done on the UI Thread. The Intent Service is running
                         // in its own thread, so it cannot communicate with the UI.
                         NewVisitFragment.getFragActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 try {
+                                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                     NewVisitFragment.getMap().setMyLocationEnabled(true);
                                     Date date = new Date();
                                     mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
@@ -72,13 +74,17 @@ public class LocationService extends IntentService {
                                     if (NewVisitFragment.getMap() != null)
                                         NewVisitFragment.getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
                                     NewVisitFragment.getMap().setMyLocationEnabled(true);
-                                    if(NewVisitFragment.getPlaceOld() != null)
+                                    if(NewVisitFragment.getPlaceOld() != null) {
                                         NewVisitFragment.getMap().addPolyline(new PolylineOptions()
                                                 .clickable(true)
                                                 .add(
                                                         NewVisitFragment.getPlaceOld(),
                                                         place2)
                                         );
+                                    } else {
+                                        Marker start = NewVisitFragment.getMap().addMarker(new MarkerOptions().position(place2).title("Start")
+                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                                    }
                                     NewVisitFragment.setPlaceOld(place2);
                                     NewVisitFragment.storeLocation(mCurrentLocation,date);
                                 } catch (Exception e) {

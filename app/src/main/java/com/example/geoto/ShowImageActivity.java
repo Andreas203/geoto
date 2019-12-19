@@ -6,7 +6,9 @@ package com.example.geoto;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -25,10 +27,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -103,7 +109,8 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
         if(b != null) {
             position = b.getInt("position");
             if (position!=-1){
-                PhotoData photoData = GalleryAdapter.getPhotoItems().get(position);
+                List<PhotoData> allPhotoData = GalleryAdapter.getPhotoItems();
+                PhotoData photoData = allPhotoData.get(position);
                 ImageView imageView = (ImageView) findViewById(R.id.image);
                 if (photoData.getAbsolutePath()!=null) {
                     Bitmap myBitmap = BitmapFactory.decodeFile(photoData.getAbsolutePath());
@@ -122,6 +129,8 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                 }
                 TextView titleView = (TextView) findViewById(R.id.path_title);
                 titleView.setText(pathData.getTitle());
+                Date startDate = pathData.getStartDate();
+                Date endDate = pathData.getEndDate();
 
                 PressureData pressureData;
                 List<PressureData> allPressureData = GalleryAdapter.getPressureItems();
@@ -138,8 +147,7 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     }
                 }
                 TextView pressureView = (TextView) findViewById(R.id.photo_pressure);
-                String pressure_var = Float.toString(pressureData.getPressure()) + " Pa";
-                pressureView.setText(pressure_var);
+                pressureView.setText(Float.toString(pressureData.getPressure()));
 
                 TempData tempData;
                 List<TempData> allTempData = GalleryAdapter.getTempItems();
@@ -156,30 +164,97 @@ public class ShowImageActivity extends AppCompatActivity implements OnMapReadyCa
                     }
                 }
                 TextView tempView = (TextView) findViewById(R.id.photo_temp);
-                String temp_var = Float.toString(tempData.getTemp()) + " 'C";
-                tempView.setText(temp_var);
+                tempView.setText(Float.toString(tempData.getTemp()));
 
-
-                LocationData locationData;
                 List<LocationData> allLocationData = GalleryAdapter.getLocationItems();
-                if (allLocationData.size() > 0) {
-                    locationData = allLocationData.get(0);
-                } else {
-                    locationData = new LocationData(0, 0, 0, new Date());
-                }
-                for (int j = 0; j < allLocationData.size(); j++) {
-                    Date locationDate = allLocationData.get(j).getDate();
+                List<LocationData> pathLocationData = new ArrayList<>();
+                for (int i = 0; i < allLocationData.size(); i++) {
+                    LocationData location = allLocationData.get(i);
 
-                    if (locationDate.before(photoData.getDate())) {
-                        locationData = allLocationData.get(j);
+                    if (location.getDate().after(startDate) && location.getDate().before(endDate)) {
+                        pathLocationData.add(location);
                     }
                 }
-                double lat = locationData.getLatitude();
-                double lon = locationData.getLongitude();
-                LatLng place = new LatLng(lat, lon);
-                googleMap.addMarker(new MarkerOptions().position(place));
-                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(place, 12);
-                googleMap.animateCamera(update);
+
+                List<PhotoData> pathPhotoData = new ArrayList<>();
+                for (int i = 0; i < allPhotoData.size(); i++) {
+                    PhotoData photo = allPhotoData.get(i);
+
+                    if (photo.getDate().after(startDate) && photo.getDate().before(endDate)) {
+                        pathPhotoData.add(photo);
+                    }
+                }
+
+                LatLng place1 = null;
+                LatLng place2 = null;
+
+                for (int i = 0; i < pathLocationData.size(); i++) {
+                    LocationData location = pathLocationData.get(i);
+                    double lat = location.getLatitude();
+                    double lon = location.getLongitude();
+                    place2 = new LatLng(lat, lon);
+
+                    if (i==0){
+                        googleMap.addMarker(new MarkerOptions().position(place2).title("Start"));
+                    }
+                    if (i==pathLocationData.size()-1){
+                        googleMap.addMarker(new MarkerOptions().position(place2).title("End"));
+
+                    }
+
+                    if (googleMap != null) {
+                        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(place2, 12);
+                        googleMap.animateCamera(update);
+
+                        if (place1 != null) {
+                            googleMap.addPolyline(new PolylineOptions()
+                                    .clickable(true)
+                                    .add(
+                                            place1,
+                                            place2)
+                            );
+                        }
+                        place1 = place2;
+                    }
+                }
+
+                for (int i = 0; i < pathPhotoData.size(); i++) {
+                    PhotoData pathPhoto = pathPhotoData.get(i);
+
+                    LocationData locationData;
+                    if (pathLocationData.size() > 0) {
+                        locationData = pathLocationData.get(0);
+                    } else {
+                        locationData  = new LocationData(0, 0, 0, new Date());
+                    }
+                    for (int j = 0; j < pathLocationData.size(); j++) {
+                        Date locationDate = pathLocationData.get(j).getDate();
+
+                        if (locationDate.before(pathPhoto.getDate())) {
+                            locationData = pathLocationData.get(j);
+                        }
+                    }
+                    double lat = locationData.getLatitude();
+                    double lon = locationData.getLongitude();
+                    LatLng place = new LatLng(lat, lon);
+
+                    Drawable icon = getResources().getDrawable(R.drawable.ic_insert_photo_blue_24dp);
+                    Canvas canvas = new Canvas();
+
+                    if (pathPhoto.equals(photoData)) {
+                        Bitmap bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth()*2, icon.getIntrinsicHeight()*2, Bitmap.Config.ARGB_8888);
+                        canvas.setBitmap(bitmap);
+                        icon.setBounds(0, 0, icon.getIntrinsicWidth()*2, icon.getIntrinsicHeight()*2);
+                        icon.draw(canvas);
+                        googleMap.addMarker(new MarkerOptions().position(place).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
+                    } else {
+                        Bitmap bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                        canvas.setBitmap(bitmap);
+                        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+                        icon.draw(canvas);
+                        googleMap.addMarker(new MarkerOptions().position(place).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
+                    }
+                }
             }
         }
     }

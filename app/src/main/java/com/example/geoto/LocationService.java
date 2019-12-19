@@ -63,12 +63,12 @@ public class LocationService extends IntentService {
                         this.stopSelf();
                     }
                     if (NewVisitFragment.getFragActivity()!=null && NewVisitFragment.getButtonState()){
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         // any modification of the user interface must be done on the UI Thread. The Intent Service is running
                         // in its own thread, so it cannot communicate with the UI.
                         NewVisitFragment.getFragActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 try {
+                                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                     NewVisitFragment.getMap().setMyLocationEnabled(true);
                                     Date date = new Date();
                                     mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());

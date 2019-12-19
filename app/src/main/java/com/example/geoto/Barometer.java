@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Date;
 
+/**
+ * Class handling barometer readings with a start and stop function
+ */
 public class Barometer {
     private static final String TAG = Barometer.class.getSimpleName();
     private long mSamplingRateInMSecs;
@@ -26,6 +29,11 @@ public class Barometer {
     private float pressureValue;
     private NewVisitFragment parent;
 
+    /**
+     * Barometer constructor setting frequencies and setting sensors
+     * @param context the environment the application is running in
+     * @param parent the parent class barometer is to be used by
+     */
     public Barometer(Context context, NewVisitFragment parent) {
         this.parent = parent;
         timePhoneWasLastRebooted = System.currentTimeMillis() -
@@ -37,12 +45,16 @@ public class Barometer {
         initBarometerListener();
     }
 
+    /**
+     * gets the current pressure value
+     * @return pressure value
+     */
     public float getPressureValue() {
         return pressureValue;
     }
 
     /**
-     * it inits the listener and establishes the actions to take when a reading is available
+     * it initialises the listener and establishes the actions to take when a reading is available
      */
     private void initBarometerListener() {
         if (!standardPressureSensorAvailable()) {
@@ -53,7 +65,7 @@ public class Barometer {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
                     long diff = event.timestamp - lastReportTime;
-// the following operation avoids reporting too many events too quickly - the sensor may always
+                    // the following operation avoids reporting too many events too quickly - the sensor may always
                     // misbehave and start sending data very quickly
                     if (diff >= mSamplingRateNano) {
                         // see next slide
@@ -75,18 +87,33 @@ public class Barometer {
         }
     }
 
+    /**
+     * Turns miliseconds to string
+     * @param actualTimeInMseconds the time in miliseconds
+     * @return
+     */
     private String mSecsToString(long actualTimeInMseconds) {
-        return "NO";
+        return String.valueOf(actualTimeInMseconds);
     }
 
+    /**
+     * get date of reading
+     * @return date
+     */
     public Date getDate(){
         return date;
     }
 
+    /**
+     * check if barometer sensor is null
+     * @return true if not null
+     */
     public boolean standardPressureSensorAvailable() {
         return (mBarometerSensor != null);
     }
-    /** * it starts the pressure monitoring */
+    /**
+     * it starts the pressure monitoring
+     */
     public void startSensingPressure() {
         // if the sensor is null,then mSensorManager is null and we get a crash
         if (standardPressureSensorAvailable()) {
@@ -99,7 +126,9 @@ public class Barometer {
                     (int) (mSamplingRateInMSecs * 1000));
         } else {
             Log.i(TAG, "barometer unavailable or already active");}}
-    /** * this stops the barometer */
+    /**
+     * this stops the barometer
+     */
     public void stopBarometer() {
         if (standardPressureSensorAvailable()) {
             Log.d("Standard Barometer", "Stopping listener");

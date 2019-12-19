@@ -44,7 +44,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Fragment containing the gallery with all images that have been taken on paths
  */
 public class GalleryFragment extends Fragment {
 
@@ -65,6 +65,11 @@ public class GalleryFragment extends Fragment {
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 7829;
 
 
+    /**
+     * Creates a GalleryFragment instance
+     * @param index indicates which fragment this is
+     * @return fragment to main view
+     */
     public static GalleryFragment newInstance(int index) {
         GalleryFragment fragment = new GalleryFragment();
 
@@ -74,6 +79,11 @@ public class GalleryFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Run when created from the Main View
+     * adds the fragment to the View Model
+     * @param savedInstanceState contains the current state of the application
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +96,14 @@ public class GalleryFragment extends Fragment {
         pageViewModel.setIndex(index);
     }
 
+    /**
+     * Creates view and initialises sensors and buttons
+     * Main onclick events are all defined here
+     * @param inflater inflate the view to fill app
+     * @param container the container containing the fragment
+     * @param savedInstanceState contains the current state of the application
+     * @return the root containing the inflated view and container
+     */
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -153,6 +171,12 @@ public class GalleryFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Option menu at the top right
+     * @param menu drop down menu
+     * @param inflater inflater making view fill the application screen
+     *
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //inflate menu
@@ -162,6 +186,12 @@ public class GalleryFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+
+    /**
+     * Reacts if options are clicked at top right and gives options for sorting by date
+     * @param item items to be placed into the list
+     * @return the items in the list
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //handle menu item clicks

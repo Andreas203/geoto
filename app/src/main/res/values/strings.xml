@@ -18,4 +18,22 @@
     <string name="no_data_available">Gallery empty</string>
     <string name="no_paths_available">Paths empty</string>
 
+    <string name="list_item_content_desc">A single image for the gallery</string>
+
+    <string name="big_image_desc">A large image in the paths</string>
+
+    <string name="gallery_large_desc">A large image in the gallery view</string>
+
+    <string name="path_title">Photo title</string>
+    <string name="photo_pressure">Photo pressure</string>
+    <string name="photo_temp">Photo temp</string>
+    <string name="tap_shop">Tap show</string>
+    <string name="loc_title">Photo Location</string>
+    <string name="path_desc">Path Descritpion</string>
+    <string name="sort_gallery">Sort gallery</string>
+
+    <string name="option1">Title A-Z</string>
+    <string name="option2">Title Z-A</string>
+    <string name="option3">New-Old</string>
+    <string name="option4">Old-New</string>
 </resources>

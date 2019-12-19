@@ -25,6 +25,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.text.DateFormat;
 import java.util.Date;
 
+/**
+ * A Location Intent service called in the NewVisitFragment to handle location updates
+ *
+ */
 public class LocationService extends IntentService {
     private Location mCurrentLocation;
     private String mLastUpdateTime;
@@ -38,9 +42,11 @@ public class LocationService extends IntentService {
     }
 
     /**
-     * called when a location is recognised
-     *
-     * @param intent
+     * Called to handle the intent
+     * If there are location updates available
+     * Plots lines on the google map in the NewVisitFragment
+     * Stores the location retrieved into the database
+     * @param intent received from the NewVisitFragment
      */
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -57,15 +63,17 @@ public class LocationService extends IntentService {
                     // check if the activity has not been closed in the meantime
                     if (!NewVisitFragment.getButtonState()){
                         NewVisitFragment.setPlaceOld(null);
-                        this.stopSelf();
+                        stopSelf();
                     }
                     if (NewVisitFragment.getFragActivity()!=null && NewVisitFragment.getButtonState()){
                         // any modification of the user interface must be done on the UI Thread. The Intent Service is running
                         // in its own thread, so it cannot communicate with the UI.
                         NewVisitFragment.getFragActivity().runOnUiThread(new Runnable() {
+                            /**
+                             * If activity is not null the location updates are run
+                             */
                             public void run() {
                                 try {
-                                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                     NewVisitFragment.getMap().setMyLocationEnabled(true);
                                     Date date = new Date();
                                     mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());

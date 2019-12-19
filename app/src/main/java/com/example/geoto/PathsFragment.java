@@ -32,7 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Fragment where old paths can be selected to be displayed
  */
 public class PathsFragment extends Fragment {
 
@@ -42,6 +42,11 @@ public class PathsFragment extends Fragment {
     private PathsAdapter mAdapter;
     private int sort = 0;
 
+    /**
+     * Creates a PathsFragment instance
+     * @param index indicates which fragment this is
+     * @return fragment to main view
+     */
     public static PathsFragment newInstance(int index) {
         PathsFragment fragment = new PathsFragment();
         Bundle bundle = new Bundle();
@@ -51,7 +56,11 @@ public class PathsFragment extends Fragment {
     }
 
 
-
+    /**
+     * Run when created from the Main View
+     * adds the fragment to the View Model
+     * @param savedInstanceState contains the current state of the application
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +73,65 @@ public class PathsFragment extends Fragment {
         pageViewModel.setIndex(index);
     }
 
+    /**
+     * Creates view and initialises path retrieval from database
+     * Creates a recycler view and assigns it an adapter
+     * @param inflater inflate the view to fill app
+     * @param container the container containing the fragment
+     * @param savedInstanceState contains the current state of the application
+     * @return the root containing the inflated view and container
+     */
+    @Override
+    public View onCreateView(
+            @NonNull LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.paths_main, container, false);
+        final RecyclerView mRecyclerView = root.findViewById(R.id.paths_recycler_view);
+        final TextView emptyView = root.findViewById(R.id.empty_paths);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        mAdapter = new PathsAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+
+        pageViewModel.getPathDataToDisplay().observe(this, new Observer<List<PathData>>(){
+            @Override
+            public void onChanged(@Nullable final List<PathData> pathList) {
+                if (pathList.isEmpty()) {
+                    mRecyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
+                mAdapter.setPathItems(pathList);
+                mAdapter.sortPaths(sort);
+                mAdapter.notifyDataSetChanged();
+            }});
+
+        pageViewModel.getLocationDataToDisplay().observe(this, new Observer<List<LocationData>>(){
+            @Override
+            public void onChanged(@Nullable final List<LocationData> pathList) {
+                mAdapter.setLocationItems(pathList);
+                mAdapter.notifyDataSetChanged();
+            }});
+
+        pageViewModel.getPhotoDataToDisplay().observe(this, new Observer<List<PhotoData>>(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onChanged(@Nullable final List<PhotoData> myPictureList) {
+                mAdapter.setPhotoItems(myPictureList);
+                mAdapter.notifyDataSetChanged();
+            }});
+
+        return root;
+    }
+
+    /**
+     * Option menu at the top right
+     * @param menu drop down menu
+     * @param inflater inflater making view fill the application screen
+     *
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //inflate menu
@@ -73,6 +141,11 @@ public class PathsFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * Reacts if options are clicked at top right and gives options for sorting by date
+     * @param item items to be placed into the list
+     * @return the items in the list
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //handle menu item clicks
@@ -119,48 +192,4 @@ public class PathsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.paths_main, container, false);
-        final RecyclerView mRecyclerView = root.findViewById(R.id.paths_recycler_view);
-        final TextView emptyView = root.findViewById(R.id.empty_paths);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        mAdapter = new PathsAdapter();
-        mRecyclerView.setAdapter(mAdapter);
-
-        pageViewModel.getPathDataToDisplay().observe(this, new Observer<List<PathData>>(){
-            @Override
-            public void onChanged(@Nullable final List<PathData> pathList) {
-                if (pathList.isEmpty()) {
-                    mRecyclerView.setVisibility(View.GONE);
-                    emptyView.setVisibility(View.VISIBLE);
-                }
-                else {
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    emptyView.setVisibility(View.GONE);
-                }
-                mAdapter.setPathItems(pathList);
-                mAdapter.sortPaths(sort);
-                mAdapter.notifyDataSetChanged();
-            }});
-
-        pageViewModel.getLocationDataToDisplay().observe(this, new Observer<List<LocationData>>(){
-            @Override
-            public void onChanged(@Nullable final List<LocationData> pathList) {
-                mAdapter.setLocationItems(pathList);
-                mAdapter.notifyDataSetChanged();
-            }});
-
-        pageViewModel.getPhotoDataToDisplay().observe(this, new Observer<List<PhotoData>>(){
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onChanged(@Nullable final List<PhotoData> myPictureList) {
-                mAdapter.setPhotoItems(myPictureList);
-                mAdapter.notifyDataSetChanged();
-            }});
-
-        return root;
-    }
 }

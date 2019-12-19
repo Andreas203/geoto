@@ -15,12 +15,13 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" >
+
             <ImageView
                 android:layout_width="wrap_content"
-                android:contentDescription="Geoto"
                 android:layout_height="43dp"
                 android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher_round"/>
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/ic_launcher_round" />
         </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
@@ -40,12 +41,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/fab"-->
-<!--        android:layout_width="wrap_content"-->tp
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom|end"-->
-<!--        android:layout_margin="@dimen/fab_margin"-->
-<!--        app:srcCompat="@android:drawable/ic_dialog_email" />-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -74,7 +74,9 @@ import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Fragment where new visits are started and current path is displayed
+ * Photos can be taken and are placed on the path
+ * Photos can be uploaded onto the path
  */
 public class NewVisitFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -106,7 +108,11 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
     private Date endDate;
     private static FragmentActivity activity;
 
-
+    /**
+     * Creates NewVisitFragment instance
+     * @param index where the fragment should be placed
+     * @return the fragment
+     */
     public static NewVisitFragment newInstance(int index) {
         NewVisitFragment fragment = new NewVisitFragment();
         Bundle bundle = new Bundle();
@@ -115,50 +121,11 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
         return fragment;
     }
 
-    public static LatLng getPlaceOld(){
-        return placeOld;
-    }
-
-    public static void setPlaceOld(LatLng oldLocation){
-        placeOld = oldLocation;
-    }
-
-    public static FragmentActivity getFragActivity() {
-        return activity;
-    }
-
-    public static void setActivity(FragmentActivity activity) {
-        NewVisitFragment.activity = activity;
-    }
-
-    public static GoogleMap getMap() {
-        return googleMap;
-    }
-
-    public void storePressure(float pressure, Date date) {
-
-        PressureData pressureData = new PressureData(pressure, date);
-        pageViewModel.insertPressure(pressureData);
-    }
-
-    public void storeTemp(float temp, Date date) {
-
-        TempData tempData = new TempData(temp, date);
-        pageViewModel.insertTemp(tempData);
-    }
-
-    public static void storeLocation(Location location, Date date) {
-        double lat = location.getLatitude();
-        double lon = location.getLongitude();
-        float acc = location.getAccuracy();
-
-
-        LocationData locationData = new LocationData(lat, lon, acc, date);
-        pageViewModel.insertLocation(locationData);
-
-    }
-
-
+    /**
+     * Run when the fragment is created from MainView
+     * adds the fragment to the View Model
+     * @param savedInstanceState get the instance of the fragments
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -173,124 +140,13 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
     }
 
     /**
-     * it stops the location updates
+     * Creates view and initialises sensors and buttons
+     * Main onclick events are all defined here
+     * @param inflater inflate the view to fill app
+     * @param container the container containing the fragment
+     * @param savedInstanceState contains the current state of the application
+     * @return the root containing the inflated view and container
      */
-    private void stopLocationUpdates(){
-        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(20000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-
-    }
-
-    private Location mCurrentLocation;
-    private String mLastUpdateTime;
-
-    LocationCallback mLocationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            super.onLocationResult(locationResult);
-            mCurrentLocation = locationResult.getLastLocation();
-            googleMap.setMyLocationEnabled(true);
-            Date date = new Date();
-            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-            Log.i("MAP", "new location " + mCurrentLocation.toString());
-            place2 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-            if (googleMap != null)
-
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
-            googleMap.setMyLocationEnabled(true);
-            if(place1 != null)
-                googleMap.addPolyline(new PolylineOptions()
-                        .clickable(true)
-                        .add(
-                                place1,
-                                place2)
-                );
-                place1 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-                if (mCurrentLocation != null) {
-                    storeLocation(mCurrentLocation, date);
-                }
-        }
-    };
-
-    private void startLocationUpdates(Context context) {
-        final Intent intent = new Intent(context, LocationService.class);
-        mLocationPendingIntent = PendingIntent.getService(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Task<Void> locationTask = mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                    mLocationPendingIntent);
-            if (locationTask != null) {
-                locationTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (e instanceof ApiException) {
-                            Log.w("MapsActivity", ((ApiException) e).getStatusMessage());
-                        } else {
-                            Log.w("MapsActivity", e.getMessage());
-                        }
-                    }
-                });
-
-                locationTask.addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        System.out.println("HERE IT IS PLEASE BE");
-                        Log.d("MapsActivity", "restarting gps successful!");
-                    }
-                });
-            }
-        }
-    }
-
-    static Boolean getButtonState(){
-        return mButtonEnd.isEnabled();
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                            mLocationCallback, null /* Looper */);
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mapView = (MapView) view.findViewById(R.id.map);
-        mapView.onCreate(savedInstanceState);
-        mapView.onResume();
-        mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
-    }
-
-
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -346,7 +202,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
         mButtonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // GET A TITLE AND DESCRIPTION OF THE PATH FROM THE USER ////////////////////////////
+                // GET A TITLE AND DESCRIPTION OF THE PATH FROM THE USER
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                 alertDialog.setTitle("Visit details");
 //                alertDialog.setMessage("Enter Path Information");
@@ -366,6 +222,7 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
 
                 alertDialog.setView(layout);
 
+                //logic for when create is clicked
                 alertDialog.setPositiveButton("Create",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -376,8 +233,9 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
                                 PathData pathData = new PathData(pathTitle, startDate, endDate, pathDescr);
                                 pageViewModel.insertPath(pathData);
 
-//
+                                //stop location updates when create is clicked
                                 stopLocationUpdates();
+
                                 // Removes all markers, overlays, and polylines from the map.
                                 googleMap.clear();
                                 place1 = null;
@@ -413,11 +271,236 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
         mButtonEnd.setEnabled(false);
 
         initEasyImage();
-        //initLocations();
 
         return root;
     }
 
+    /**
+     * Initialise map after view is created
+     * @param view the current  view displayed to the user
+     * @param savedInstanceState contains the current state of the application
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mapView = (MapView) view.findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
+    }
+
+    /**
+     * Retrieves previous location
+     * @return previous location
+     */
+    public static LatLng getPlaceOld(){
+        return placeOld;
+    }
+
+    /**
+     * Sets the previous location retrieved
+     * @param oldLocation the location before the current one
+     */
+    public static void setPlaceOld(LatLng oldLocation){
+        placeOld = oldLocation;
+    }
+
+    /**
+     * Gets the current activity of the fragment
+     * @return static activity class variable
+     */
+    public static FragmentActivity getFragActivity() {
+        return activity;
+    }
+
+    /**
+     * Store static class Activity variable
+     * @param activity set activity of the fragment
+     */
+    public static void setActivity(FragmentActivity activity) {
+        NewVisitFragment.activity = activity;
+    }
+
+    /**
+     * get map instance displayed on page
+     * @return static googleMap to services
+     */
+    public static GoogleMap getMap() {
+        return googleMap;
+    }
+
+    /**
+     * Stores pressure and date in the database
+     * @param pressure retrieved from the barometer
+     * @param date store current date and time
+     */
+    public void storePressure(float pressure, Date date) {
+
+        PressureData pressureData = new PressureData(pressure, date);
+        pageViewModel.insertPressure(pressureData);
+    }
+
+    /**
+     * Store temperature and date in the database
+     * @param temp retrieved from the thermometer
+     * @param date store current date and time
+     */
+    public void storeTemp(float temp, Date date) {
+
+        TempData tempData = new TempData(temp, date);
+        pageViewModel.insertTemp(tempData);
+    }
+
+    /**
+     * Store location and date in the database
+     * @param location retrieved from fusedLocation and split into latitude and longitude
+     * @param date store current date and time
+     */
+    public static void storeLocation(Location location, Date date) {
+        double lat = location.getLatitude();
+        double lon = location.getLongitude();
+        float acc = location.getAccuracy();
+
+
+        LocationData locationData = new LocationData(lat, lon, acc, date);
+        pageViewModel.insertLocation(locationData);
+
+    }
+
+    /**
+     * Stops the location updates
+     */
+    private void stopLocationUpdates(){
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+    }
+
+    /**
+     * Run the the app is resumed and gets a location request
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(20000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+
+    }
+
+    private Location mCurrentLocation;
+    private String mLastUpdateTime;
+
+    /**
+     * Callback for getting the location and plotting on map
+     * If intent succeeds it will not run
+     */
+    LocationCallback mLocationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            mCurrentLocation = locationResult.getLastLocation();
+            googleMap.setMyLocationEnabled(true);
+            Date date = new Date();
+            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+            Log.i("MAP", "new location " + mCurrentLocation.toString());
+            place2 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            if (googleMap != null)
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14.0f));
+            googleMap.setMyLocationEnabled(true);
+            if(place1 != null)
+                googleMap.addPolyline(new PolylineOptions()
+                        .clickable(true)
+                        .add(
+                                place1,
+                                place2)
+                );
+                place1 = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                if (mCurrentLocation != null) {
+                    storeLocation(mCurrentLocation, date);
+                }
+        }
+    };
+
+    /**
+     * Starts the location updates and calls service to continue getting locations
+     * @param context uses current application context to pass to  intent
+     */
+    private void startLocationUpdates(Context context) {
+        final Intent intent = new Intent(context, LocationService.class);
+        mLocationPendingIntent = PendingIntent.getService(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Task<Void> locationTask = mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                    mLocationPendingIntent);
+            if (locationTask != null) {
+                locationTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (e instanceof ApiException) {
+                            Log.w("MapsActivity", ((ApiException) e).getStatusMessage());
+                        } else {
+                            Log.w("MapsActivity", e.getMessage());
+                        }
+                    }
+                });
+
+                locationTask.addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        System.out.println("HERE IT IS PLEASE BE");
+                        Log.d("MapsActivity", "restarting gps successful!");
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Check end button state to see if plotting still needs to occur
+     * @return end button state
+     */
+    static Boolean getButtonState(){
+        return mButtonEnd.isEnabled();
+    }
+
+    /**
+     * Handles the permission request
+     * @param requestCode the request coming in
+     * @param permissions list of permission to check
+     * @param grantResults results from permission check
+     */
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                            mLocationCallback, null /* Looper */);
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    /**
+     * Initialise the EasyImage configuration
+     */
     private void initEasyImage() {
         EasyImage.configuration(getContext())
                 .setImagesFolderName("EasyImage sample")
@@ -426,12 +509,23 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
                 .setAllowMultiplePickInGallery(true);
     }
 
+    /**
+     * Check if the map is ready and assign it
+     * Set up a listener for the markers
+     * @param map
+     */
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
         googleMap.setOnMarkerClickListener(this);
     }
 
+    /**
+     * Option menu at the top right
+     * @param menu drop down menu
+     * @param inflater inflater making view fill the application screen
+     *
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //inflate menu
@@ -440,6 +534,11 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
         menu.findItem(R.id.action_sort).setVisible(false);
     }
 
+    /**
+     * Reacts if options are clicked
+     * @param item items to be placed into the list
+     * @return the items in the list
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //handle menu item clicks
@@ -454,6 +553,12 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handles EasyImage camera activity results when it finishes
+     * @param requestCode the request code
+     * @param resultCode the result code
+     * @param data the data received from the activity
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -512,6 +617,11 @@ public class NewVisitFragment extends Fragment implements OnMapReadyCallback, Go
 
     }
 
+    /**
+     * When image marker is clicked so the image
+     * @param marker the specific marker to show image for
+     * @return
+     */
     @Override
     public boolean onMarkerClick(final Marker marker) {
         System.out.println("GOT TO 0");

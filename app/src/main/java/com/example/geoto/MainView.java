@@ -27,13 +27,24 @@ import android.view.MenuItem;
 
 import java.util.List;
 
+/**
+ * A class to represent the activity for  entire application which splits into Fragments
+ * checks for permissions
+ * and handles activity results
+ */
 public class MainView extends AppCompatActivity {
 
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2987;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 7829;
     private static final int ACCESS_FINE_LOCATION = 123;
-    public static boolean dark;
 
+    /**
+     * Function that is run when the app opens
+     * Sets the general layout that the fragments sit in
+     * Calls page adapter and calls fragments
+     * Calls for location permissions
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -85,15 +96,19 @@ public class MainView extends AppCompatActivity {
     }
 
     @Override
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Checks if location permissions are there, if not it asks for them in order to track device on map
+     */
     private void initLocations() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Should we show an explanation?
@@ -120,6 +135,10 @@ public class MainView extends AppCompatActivity {
         }
     }
 
+    /**
+     * check if permissions for read write have been gathered, otherwise asks for them
+     * @param context the environment the applications is running in
+     */
     private void checkPermissions(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
@@ -169,6 +188,7 @@ public class MainView extends AppCompatActivity {
     }
 
     @Override
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         List<Fragment> fragments = getSupportFragmentManager().getFragments();

@@ -26,6 +26,11 @@ public class Thermometer {
     private Date date;
     private NewVisitFragment parent;
 
+    /**
+     * Barometer constructor setting frequencies and setting sensors
+     * @param context the environment the application is running in
+     * @param parent the parent class thermometer is to be used by
+     */
     public Thermometer(Context context, NewVisitFragment parent) {
         this.parent = parent;
         timePhoneWasLastRebooted = System.currentTimeMillis() -
@@ -72,22 +77,43 @@ public class Thermometer {
         }
     }
 
+    /**
+     * gets the current pressure value
+     * @return pressure value
+     */
     public float getTempValue(){
         return temperatureValue;
     }
 
+    /**
+     * Turns miliseconds to string
+     * @param actualTimeInMseconds the time in miliseconds
+     * @return
+     */
+    private String mSecsToString(long actualTimeInMseconds) {
+        return String.valueOf(actualTimeInMseconds);
+    }
+
+    /**
+     * get date of reading
+     * @return date
+     */
     public Date getDate(){
         return date;
     }
 
-    private String mSecsToString(long actualTimeInMseconds) {
-        return "NO";
-    }
 
+    /**
+     * Check if the sensor is not null
+     * @return true if sensor is not null
+     */
     public boolean standardTemperatureSensorAvailable() {
         return (mThermometerSensor != null);
     }
-    /** * it starts the pressure monitoring */
+
+    /**
+     * it starts the temperature monitoring
+     */
     public void startSensingTemperature() {
         // if the sensor is null,then mSensorManager is null and we get a crash
         if (standardTemperatureSensorAvailable()) {
@@ -100,7 +126,11 @@ public class Thermometer {
                     (int) (mSamplingRateInMSecs * 1000));
         } else {
             Log.i(TAG, "Thermometer unavailable or already active");}}
-    /** * this stops the Thermometer */
+
+
+    /**
+     * this stops the Thermometer
+     */
     public void stopThermometer() {
         if (standardTemperatureSensorAvailable()) {
             Log.d("Standard Thermometer", "Stopping listener");

@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * A class to define how the gallery displays a list of photo data
+ */
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Holder> {
     static private Context context;
     private static List<PhotoData> photoItems;
@@ -34,10 +37,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
     private static List<PressureData> pressureItems;
     private static List<TempData> tempItems;
 
-    public GalleryAdapter(List<PhotoData> items) {
-        this.photoItems = items;
-    }
-
+    /**
+     * A constructor to initialise the adapter items
+     */
     public GalleryAdapter() {
         super();
         photoItems = new ArrayList<>();
@@ -47,6 +49,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
         tempItems = new ArrayList<>();
     }
 
+    /**
+     * Assigns a view to the view holder
+     * @param parent the parent view
+     * @param viewType
+     * @return the updated holder
+     */
     @Override
     public View_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //Inflate the layout, initialize the View Holder
@@ -58,6 +66,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
         return holder;
     }
 
+    /**
+     * Populates the view with adapted photo items
+     * @param holder a single photo holder
+     * @param position the position in the grid
+     */
     @Override
     public void onBindViewHolder(final View_Holder holder, final int position) {
 
@@ -81,16 +94,25 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
     }
 
 
-    // convenience method for getting data at click position
+    /**
+     * Convenience method for getting data at click position
+     */
     PhotoData getItem(int id) {
         return photoItems.get(id);
     }
 
+    /**
+     * Get the number of photos displayed
+     * @return the number of photos
+     */
     @Override
     public int getItemCount() {
         return photoItems.size();
     }
 
+    /**
+     * An inner class to represent each displayed photo
+     */
     public class View_Holder extends RecyclerView.ViewHolder  {
         ImageView imageView;
 
@@ -101,6 +123,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
         }
     }
 
+    /**
+     * Sorts the photo items based on date
+     * @param sortCode the direction of the sort
+     */
     public void sortGallery(int sortCode) {
         if ((photoItems.size()) > 0) {
             if (sortCode == 0) {
@@ -112,42 +138,78 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.View_Hol
         }
     }
 
+    /**
+     * Returns the photo data list
+     * @return photoItems
+     */
     public static List<PhotoData> getPhotoItems() {
         return photoItems;
     }
 
+    /**
+     * Sets the photo data list
+     * @param photoItems
+     */
     public static void setPhotoItems(List<PhotoData> photoItems) {
         GalleryAdapter.photoItems = photoItems;
     }
 
+    /**
+     * Returns the path data list
+     * @return pathItems
+     */
     public static List<PathData> getPathItems() {
         return pathItems;
     }
-
+    /**
+     * Sets the path data list
+     * @param pathItems
+     */
     public static void setPathItems(List<PathData> pathItems) {
         GalleryAdapter.pathItems = pathItems;
     }
 
+    /**
+     * Returns the location data list
+     * @return locationItems
+     */
     public static List<LocationData> getLocationItems() {
         return locationItems;
     }
-
+    /**
+     * Sets the location data list
+     * @param locationItems
+     */
     public static void setLocationItems(List<LocationData> locationItems) {
         GalleryAdapter.locationItems = locationItems;
     }
 
+    /**
+     * Returns the pressure data list
+     * @return pressureItems
+     */
     public static List<PressureData> getPressureItems() {
         return pressureItems;
     }
-
+    /**
+     * Sets the pressure data list
+     * @param pressureItems
+     */
     public static void setPressureItems(List<PressureData> pressureItems) {
         GalleryAdapter.pressureItems = pressureItems;
     }
 
+    /**
+     * Returns the temp data list
+     * @return tempItems
+     */
     public static List<TempData> getTempItems() {
         return tempItems;
     }
-
+    /**
+     * Sets the temp data items
+     * @param tempItems
+     */
     public static void setTempItems(List<TempData> tempItems) {
         GalleryAdapter.tempItems = tempItems;
     }

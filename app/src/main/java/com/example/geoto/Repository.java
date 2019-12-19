@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * A class to represent the model of the system data
+ */
 class Repository extends ViewModel {
     private final PhotoDAO photoDao;
     private final PathDAO pathDao;
@@ -29,6 +32,10 @@ class Repository extends ViewModel {
     private final PressureDAO pressureDao;
     private final TempDAO tempDao;
 
+    /**
+     * A constructor to initialise the room database and repository data
+     * @param application
+     */
     public Repository(Application application) {
         MyRoomDatabase db = MyRoomDatabase.getDatabase(application);
         photoDao = db.photoDao();
@@ -39,34 +46,77 @@ class Repository extends ViewModel {
     }
 
     /**
-     * it gets all types of data when changed in the db and returns it to the ViewModel
-     * @return
+     * it gets all types of photo data when changed in the db and returns it to the ViewModel
+     * @return a list of all the photos in the db
      */
     public LiveData<List<PhotoData>> getAllPhotos() {
         return photoDao.getAllPhotos();
     }
+    /**
+     * it gets all types of path data when changed in the db and returns it to the ViewModel
+     * @return a list of all the paths in the db
+     */
     public LiveData<List<PathData>> getAllPaths() {
         return pathDao.getAllPaths();
     }
+    /**
+     * it gets all locations for one path, when changed in the db and returns it to the ViewModel
+     * @parmam startDate the start of the path
+     * @parmam endDate the end of the path
+     * @return a list of all the locations for a given path
+     */
     public LiveData<List<LocationData>> getPathLocations(Date startDate,Date endDate) {return locationDao.getPathLocations(startDate,endDate);}
+    /**
+     * it gets all types of location data when changed in the db and returns it to the ViewModel
+     * @return a list of all the locations in the db
+     */
     public LiveData<List<LocationData>> getAllLocations() {
         return locationDao.getAllLocations();
     }
+    /**
+     * it gets all types of pressure data when changed in the db and returns it to the ViewModel
+     * @return a list of all the pressures in the db
+     */
     public LiveData<List<PressureData>> getAllPressures() {
         return pressureDao.getAllPressures();
     }
+    /**
+     * it gets all types of temp data when changed in the db and returns it to the ViewModel
+     * @return a list of all the temps in the db
+     */
     public LiveData<List<TempData>> getAllTemps() {
         return tempDao.getAllTemps();
     }
 
-
+    /**
+     * Starts an async task to insert a photo in the db
+     * @param photo to be inserted
+     */
     public void insertPhoto(PhotoData photo) { new insertPhotoAsyncTask(photoDao).execute(photo);    }
+    /**
+     * Starts an async task to insert a path in the db
+     * @param path to be inserted
+     */
     public void insertPath(PathData path) { new insertPathAsyncTask(pathDao).execute(path);    }
+    /**
+     * Starts an async task to insert a location in the db
+     * @param location to be inserted
+     */
     public void insertLocation(LocationData location) { new insertLocationAsyncTask(locationDao).execute(location);    }
+    /**
+     * Starts an async task to insert a pressure in the db
+     * @param pressure to be inserted
+     */
     public void insertPressure(PressureData pressure) { new insertPressureAsyncTask(pressureDao).execute(pressure);    }
+    /**
+     * Starts an async task to insert a temp in the db
+     * @param temp to be inserted
+     */
     public void insertTemp(TempData temp) { new insertTempAsyncTask(tempDao).execute(temp);    }
 
-    // Insert photo
+    /**
+     * Inserts a photo
+     */
     private static class insertPhotoAsyncTask extends AsyncTask<PhotoData, Void, Void> {
         private PhotoDAO mAsyncTaskDao;
         private LiveData<PhotoData> photoData;
@@ -85,7 +135,9 @@ class Repository extends ViewModel {
         }
     }
 
-    // Insert path
+    /**
+     * Inserts a path
+     */
     private static class insertPathAsyncTask extends AsyncTask<PathData, Void, Void> {
         private PathDAO mAsyncTaskDao;
         private LiveData<PathData> pathData;
@@ -104,7 +156,9 @@ class Repository extends ViewModel {
         }
     }
 
-    // Insert location
+    /**
+     * Inserts a location
+     */
     private static class insertLocationAsyncTask extends AsyncTask<LocationData, Void, Void> {
         private LocationDAO mAsyncTaskDao;
         private LiveData<LocationData> locationData;
@@ -123,7 +177,9 @@ class Repository extends ViewModel {
         }
     }
 
-    // Insert pressure
+    /**
+     * Inserts a pressure
+     */
     private static class insertPressureAsyncTask extends AsyncTask<PressureData, Void, Void> {
         private PressureDAO mAsyncTaskDao;
         private LiveData<PressureData> pressureData;
@@ -142,7 +198,9 @@ class Repository extends ViewModel {
         }
     }
 
-    // Insert temp
+    /**
+     * Inserts a temp
+     */
     private static class insertTempAsyncTask extends AsyncTask<TempData, Void, Void> {
         private TempDAO mAsyncTaskDao;
         private LiveData<TempData> tempData;
